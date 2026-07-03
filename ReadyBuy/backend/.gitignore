@@ -1,0 +1,100 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime files
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Build output
+dist/
+build/
+out/
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+
+# Uploads (if storing locally before Cloudinary)
+uploads/
+public/uploads/
+
+# Multer temp files
+tmp/uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# JetBrains IDEs
+.idea/
+
+# Environment managers
+.nvmrc.local
+
+# Package manager files
+.pnpm-store/
+.yarn/
+.yarn-cache/
+
+# Node REPL history
+.node_repl_history
+
+# Diagnostic reports
+report.*
+*.dump
+
+# Redis
+dump.rdb
+
+# Docker
+.docker/
+
+# Testing
+coverage-final.json
+
+# Generated archives
+*.tgz
+*.zip
+
+# Certificates / Keys
+*.pem
+*.key
+*.crt
+*.p12
+
+# Local database files
+*.sqlite
+*.sqlite3
+
+# Winston log files
+logs/*.log
