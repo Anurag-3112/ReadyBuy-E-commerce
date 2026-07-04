@@ -1,4 +1,4 @@
-# 🛒 E-commerce Frontend (React) 
+# 🛒 ReadyBuy (E-commerce Website) 
 
 ![React](https://img.shields.io/badge/React-Frontend-blue)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-Styling-purple)
