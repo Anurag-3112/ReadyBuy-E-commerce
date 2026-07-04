@@ -1,6 +1,6 @@
 # 🛒 ReadyBuy (E-commerce Website) 
 
-![React](https://img.shields.io/badge/React-Frontend-blue)
+![React](https://img.shields.io/badge/React-Frontend-blue) 
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-Styling-purple)
 ![CSS](https://img.shields.io/badge/CSS3-Design-blue)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)
