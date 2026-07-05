@@ -31,22 +31,6 @@ export const createCategory =
 
     });
 
-export const getCategories =
-    asyncHandler(async (req, res) => {
-
-        const categories =
-            await getCategoriesService();
-
-        return res.status(200).json({
-
-            success: true,
-
-            data: categories,
-
-        });
-
-    });
-
 export const getAllCategories =
     asyncHandler(async (req, res) => {
 
@@ -81,19 +65,19 @@ export const getCategory =
 
     });
 
-export const getCategoryBySlug =
+export const getCategories =
     asyncHandler(async (req, res) => {
 
-        const category =
-            await getCategoryBySlugService(
-                req.params.slug
+        const categories =
+            await getCategoriesService(
+                req.query
             );
 
         return res.status(200).json({
 
             success: true,
 
-            data: category,
+            data: categories,
 
         });
 
@@ -137,6 +121,26 @@ export const deleteCategory =
 
             message:
                 "Category deleted successfully",
+
+        });
+
+    });
+
+export const getCategoryBySlug =
+    asyncHandler(async (req, res) => {
+
+        const category =
+            await getCategoryBySlugService(
+
+                req.params.slug
+
+            );
+
+        return res.json({
+
+            success: true,
+
+            data: category,
 
         });
 
