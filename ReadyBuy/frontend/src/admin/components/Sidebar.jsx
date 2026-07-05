@@ -15,7 +15,7 @@ const Sidebar = () => {
     return (
 
         <Nav
-            className="flex-column bg-dark text-white vh-100 p-3"
+            className="flex-column bg-dark text-white p-3 h-100"
             style={{
                 width: "250px",
             }}
