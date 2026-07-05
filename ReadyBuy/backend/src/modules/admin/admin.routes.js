@@ -8,11 +8,24 @@ import {
     monthlyRevenue,
 } from "./admin.controller.js";
 
-// import orderRoutes from "./orders/order.routes.js";
+import orderRoutes from "../orders/order.routes.js";
+import userRoutes from "../users/user.routes.js";
 
 const router = express.Router();
 
-// router.use("/orders", orderRoutes);
+router.use(
+    "/orders",
+    authenticate,
+    authorize("ADMIN"),
+    orderRoutes
+);
+
+router.use(
+    "/users",
+    authenticate,
+    authorize("ADMIN"),
+    userRoutes
+);
 
 router.get(
     "/stats",
