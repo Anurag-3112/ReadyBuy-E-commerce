@@ -1,12 +1,13 @@
 import { useState } from "react";
 
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
 import { useQuery } from "@tanstack/react-query";
 
-import Loader from "../components/Loader";
+import LoadingState from "../components/LoadingState";
+import EmptyState from "../components/EmptyState";
+import PageHeader from "../components/PageHeader";
+import PaginationControls from "../components/PaginationControls";
 
 import OrderFilters from "./OrderFilters";
 import OrderTable from "./OrderTable";
@@ -24,13 +25,15 @@ const OrdersList = () => {
     const [status, setStatus] =
         useState("");
 
-    const [selectedOrder,
-        setSelectedOrder] =
-        useState(null);
+    const [
+        selectedOrder,
+        setSelectedOrder,
+    ] = useState(null);
 
-    const [showDetails,
-        setShowDetails] =
-        useState(false);
+    const [
+        showDetails,
+        setShowDetails,
+    ] = useState(false);
 
     const {
         data,
@@ -47,76 +50,52 @@ const OrdersList = () => {
         ],
 
         queryFn: () =>
-
             getOrders({
-
                 page,
-
                 search,
-
                 status,
-
             }),
 
         keepPreviousData: true,
 
     });
 
-    const openDetails =
-        (order) => {
+    const openDetails = (order) => {
 
-            setSelectedOrder(order);
+        setSelectedOrder(order);
 
-            setShowDetails(true);
+        setShowDetails(true);
 
-        };
+    };
 
-    const closeDetails =
-        () => {
+    const closeDetails = () => {
 
-            setShowDetails(false);
+        setSelectedOrder(null);
 
-            setSelectedOrder(null);
+        setShowDetails(false);
 
-        };
+    };
 
     if (isLoading) {
-
-        return <Loader />;
-
+        return <LoadingState />;
     }
 
     if (isError) {
-
         return (
-
-            <div>
-
-                Failed to load orders.
-
-            </div>
-
+            <EmptyState
+                title="Failed to load orders"
+                subtitle="Please try again."
+            />
         );
-
     }
 
     return (
 
         <>
 
-            <Row className="mb-4">
-
-                <Col>
-
-                    <h2>
-
-                        Orders
-
-                    </h2>
-
-                </Col>
-
-            </Row>
+            <PageHeader
+                title="Orders"
+            />
 
             <OrderFilters
 
@@ -130,89 +109,58 @@ const OrdersList = () => {
 
             />
 
-            <OrderTable
+            {data.docs.length === 0 ? (
 
-                orders={data.docs}
+                <EmptyState
+                    title="No Orders"
+                    subtitle="No orders found."
+                />
 
-                onView={openDetails}
+            ) : (
 
-                refetch={refetch}
+                <OrderTable
+
+                    orders={data.docs}
+
+                    onView={openDetails}
+
+                    refetch={refetch}
+
+                />
+
+            )}
+
+            <PaginationControls
+
+                page={data.page}
+
+                hasPrevPage={data.hasPrevPage}
+
+                hasNextPage={data.hasNextPage}
+
+                onPrevious={() =>
+                    setPage((prev) => prev - 1)
+                }
+
+                onNext={() =>
+                    setPage((prev) => prev + 1)
+                }
 
             />
 
-            <div
-                className="d-flex justify-content-between mt-4"
-            >
+            {selectedOrder && (
 
-                <Button
+                <OrderDetailsModal
 
-                    disabled={
-                        !data.hasPrevPage
-                    }
+                    show={showDetails}
 
-                    onClick={() => setPage(
+                    handleClose={closeDetails}
 
-                        prev => prev - 1
+                    order={selectedOrder}
 
-                    )}
+                />
 
-                >
-
-                    Previous
-
-                </Button>
-
-                <span>
-
-                    Page {data.page}
-
-                    {" "}
-
-                    of
-
-                    {" "}
-
-                    {data.totalPages}
-
-                </span>
-
-                <Button
-
-                    disabled={
-                        !data.hasNextPage
-                    }
-
-                    onClick={() => setPage(
-
-                        prev => prev + 1
-
-                    )}
-
-                >
-
-                    Next
-
-                </Button>
-
-            </div>
-
-            {
-
-                selectedOrder && (
-
-                    <OrderDetailsModal
-
-                        show={showDetails}
-
-                        handleClose={closeDetails}
-
-                        order={selectedOrder}
-
-                    />
-
-                )
-
-            }
+            )}
 
         </>
 
