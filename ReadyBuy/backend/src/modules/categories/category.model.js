@@ -32,6 +32,26 @@ const categorySchema = new mongoose.Schema(
             enum: ["ACTIVE", "INACTIVE"],
             default: "ACTIVE",
         },
+
+        isFeatured: {
+            type: Boolean,
+            default: false,
+        },
+
+        displayOrder: {
+            type: Number,
+            default: 0,
+        },
+
+        seoTitle: {
+            type: String,
+            default: "",
+        },
+
+        seoDescription: {
+            type: String,
+            default: "",
+        },
     },
     {
         timestamps: true,
