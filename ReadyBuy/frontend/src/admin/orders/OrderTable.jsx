@@ -1,32 +1,11 @@
-import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
-import Badge from "react-bootstrap/Badge";
-import Image from "react-bootstrap/Image";
 import Stack from "react-bootstrap/Stack";
 
+import DataTable from "../components/DataTable";
+import StatusBadge from "../components/StatusBadge";
+import ImageThumbnail from "../components/ImageThumbnail";
+
 import StatusDropdown from "./StatusDropdown";
-
-const statusVariant = (status) => {
-    switch (status) {
-        case "PENDING":
-            return "warning";
-
-        case "PAID":
-            return "primary";
-
-        case "SHIPPED":
-            return "info";
-
-        case "DELIVERED":
-            return "success";
-
-        case "CANCELLED":
-            return "danger";
-
-        default:
-            return "secondary";
-    }
-};
 
 const OrderTable = ({
     orders,
@@ -35,265 +14,176 @@ const OrderTable = ({
     onStatusChange,
 }) => {
 
-    if (!orders.length) {
-
-        return (
-
-            <div className="text-center py-5">
-
-                <h4>
-
-                    No Orders Found
-
-                </h4>
-
-            </div>
-
-        );
-
-    }
+    const columns = [
+        "#",
+        "Image",
+        "Order",
+        "Customer",
+        "Items",
+        "Total",
+        "Status",
+        "Created",
+        "Update",
+        "Actions",
+    ];
 
     return (
 
-        <Table
-            responsive
-            bordered
-            hover
-            striped
-        >
+        <DataTable
 
-            <thead>
+            columns={columns}
 
-                <tr>
+            data={orders}
 
-                    <th>#</th>
+            emptyTitle="No Orders Found"
 
-                    <th>Image</th>
+            emptySubtitle="Orders will appear here."
 
-                    <th>Order</th>
+            renderRow={(order, index) => {
 
-                    <th>Customer</th>
+                const firstProduct =
+                    order.items?.[0];
 
-                    <th>Items</th>
+                return (
 
-                    <th>Total</th>
+                    <tr key={order._id}>
 
-                    <th>Status</th>
+                        <td>
 
-                    <th>Created</th>
+                            {index + 1}
 
-                    <th>Update</th>
+                        </td>
 
-                    <th>Actions</th>
+                        <td>
 
-                </tr>
+                            <ImageThumbnail
 
-            </thead>
+                                src={
+                                    firstProduct?.product
+                                        ?.images?.[0]
+                                }
 
-            <tbody>
+                                alt={
+                                    firstProduct?.name
+                                }
 
-                {
+                                size={70}
 
-                    orders.map(
-                        (order, index) => {
+                            />
 
-                            const firstProduct =
-                                order.items?.[0];
+                        </td>
 
-                            return (
+                        <td>
 
-                                <tr
-                                    key={order._id}
+                            {order._id}
+
+                        </td>
+
+                        <td>
+
+                            <Stack>
+
+                                <strong>
+
+                                    {order.user?.name}
+
+                                </strong>
+
+                                <small>
+
+                                    {order.user?.email}
+
+                                </small>
+
+                            </Stack>
+
+                        </td>
+
+                        <td>
+
+                            {order.items.length}
+
+                        </td>
+
+                        <td>
+
+                            ₹{order.totalAmount}
+
+                        </td>
+
+                        <td>
+
+                            <StatusBadge
+
+                                status={order.status}
+
+                            />
+
+                        </td>
+
+                        <td>
+
+                            {new Date(
+                                order.createdAt
+                            ).toLocaleDateString()}
+
+                        </td>
+
+                        <td>
+
+                            <StatusDropdown
+
+                                order={order}
+
+                                onChange={
+                                    onStatusChange
+                                }
+
+                            />
+
+                        </td>
+
+                        <td>
+
+                            <Stack
+                                direction="horizontal"
+                                gap={2}
+                            >
+
+                                <Button
+                                    size="sm"
+                                    onClick={() =>
+                                        onView(order)
+                                    }
                                 >
 
-                                    <td>
+                                    View
 
-                                        {index + 1}
+                                </Button>
 
-                                    </td>
+                                <Button
+                                    variant="danger"
+                                    size="sm"
+                                    onClick={() =>
+                                        onDelete(order)
+                                    }
+                                >
 
-                                    <td>
+                                    Delete
 
-                                        <Image
+                                </Button>
 
-                                            src={
-                                                firstProduct
-                                                    ?.product
-                                                    ?.images?.[0] ||
+                            </Stack>
 
-                                                "/placeholder.png"
-                                            }
+                        </td>
 
-                                            rounded
+                    </tr>
 
-                                            width={70}
+                );
 
-                                            height={70}
+            }}
 
-                                            style={{
-
-                                                objectFit: "cover",
-
-                                            }}
-
-                                        />
-
-                                    </td>
-
-                                    <td>
-
-                                        {order._id}
-
-                                    </td>
-
-                                    <td>
-
-                                        <Stack>
-
-                                            <strong>
-
-                                                {
-                                                    order.user
-                                                        ?.name
-                                                }
-
-                                            </strong>
-
-                                            <small>
-
-                                                {
-                                                    order.user
-                                                        ?.email
-                                                }
-
-                                            </small>
-
-                                        </Stack>
-
-                                    </td>
-
-                                    <td>
-
-                                        {
-                                            order.items.length
-                                        }
-
-                                    </td>
-
-                                    <td>
-
-                                        ₹
-
-                                        {
-                                            order.totalAmount
-                                        }
-
-                                    </td>
-
-                                    <td>
-
-                                        <Badge
-                                            bg={
-                                                statusVariant(
-                                                    order.status
-                                                )
-                                            }
-                                        >
-
-                                            {
-                                                order.status
-                                            }
-
-                                        </Badge>
-
-                                    </td>
-
-                                    <td>
-
-                                        {
-
-                                            new Date(
-
-                                                order.createdAt
-
-                                            ).toLocaleDateString()
-
-                                        }
-
-                                    </td>
-
-                                    <td>
-
-                                        <StatusDropdown
-
-                                            order={order}
-
-                                            onChange={
-                                                onStatusChange
-                                            }
-
-                                        />
-
-                                    </td>
-
-                                    <td>
-
-                                        <Stack
-                                            direction="horizontal"
-                                            gap={2}
-                                        >
-
-                                            <Button
-
-                                                size="sm"
-
-                                                onClick={() => {
-
-                                                    onView(order)
-
-                                                }}
-
-                                            >
-
-                                                View
-
-                                            </Button>
-
-                                            <Button
-
-                                                variant="danger"
-
-                                                size="sm"
-
-                                                onClick={() => {
-
-                                                    onDelete(order)
-
-                                                }}
-
-                                            >
-
-                                                Delete
-
-                                            </Button>
-
-                                        </Stack>
-
-                                    </td>
-
-                                </tr>
-
-                            );
-
-                        }
-
-                    )
-
-                }
-
-            </tbody>
-
-        </Table>
+        />
 
     );
 
