@@ -33,6 +33,31 @@ const userSchema = new mongoose.Schema(
             default: false,
         },
 
+        phone: {
+            type: String,
+            default: "",
+        },
+
+        avatar: {
+            type: String,
+            default: "",
+        },
+
+        status: {
+            type: String,
+            enum: ["ACTIVE", "BLOCKED"],
+            default: "ACTIVE",
+        },
+
+        lastLogin: {
+            type: Date,
+        },
+
+        wishlist: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+        }],
+
         refreshToken: {
             type: String,
             default: null,
