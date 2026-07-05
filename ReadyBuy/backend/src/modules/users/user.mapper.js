@@ -7,6 +7,14 @@ export const toUserResponse = (user) => ({
 
     role: user.role,
 
+    status: user.status,
+
+    avatar: user.avatar,
+
+    phone: user.phone,
+
+    lastLogin: user.lastLogin,
+
     isVerified: user.isVerified,
 
     createdAt: user.createdAt,
