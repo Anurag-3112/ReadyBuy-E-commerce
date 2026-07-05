@@ -1,49 +1,99 @@
 import api from "../../services/api";
 
-export const getCategories = async (params = {}) => {
-    const response = await api.get(
+export const getCategories = async (
+    params = {}
+) => {
+
+    const res = await api.get(
         "/categories/admin",
         {
             params,
         }
     );
 
-    return response.data.data;
+    return res.data.data;
+
 };
 
-export const getCategory = async (id) => {
-    const response = await api.get(
+export const getCategory = async (
+    id
+) => {
+
+    const res = await api.get(
         `/categories/admin/${id}`
     );
 
-    return response.data.data;
+    return res.data.data;
+
 };
 
-export const createCategory = async (data) => {
-    const response = await api.post(
+export const createCategory = async (
+    payload
+) => {
+
+    const res = await api.post(
+
         "/categories/admin",
-        data
+
+        payload,
+
+        {
+
+            headers: {
+
+                "Content-Type":
+
+                    "multipart/form-data",
+
+            },
+
+        }
+
     );
 
-    return response.data.data;
+    return res.data.data;
+
 };
 
 export const updateCategory = async (
     id,
-    data
+    payload
 ) => {
-    const response = await api.put(
+
+    const res = await api.put(
+
         `/categories/admin/${id}`,
-        data
+
+        payload,
+
+        {
+
+            headers: {
+
+                "Content-Type":
+
+                    "multipart/form-data",
+
+            },
+
+        }
+
     );
 
-    return response.data.data;
+    return res.data.data;
+
 };
 
-export const deleteCategory = async (id) => {
-    const response = await api.delete(
+export const deleteCategory = async (
+    id
+) => {
+
+    const res = await api.delete(
+
         `/categories/admin/${id}`
+
     );
 
-    return response.data.data;
+    return res.data.data;
+
 };
