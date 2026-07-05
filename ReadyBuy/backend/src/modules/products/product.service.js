@@ -1,11 +1,14 @@
 import AppError from "../../shared/errors/AppError.js";
 import redis from "../../config/redis.js";
+import slugify from "slugify";
 
 import {
     createProduct,
     findProductBySlug,
+    findProductById,
     getProducts,
     updateProduct,
+    deleteProduct,
 } from "./product.repository.js";
 
 import {
@@ -56,41 +59,45 @@ const uploadToCloudinary = (file) => {
 
 };
 
-export const createProductService =
-    async (
-        productData,
-        files = []
-    ) => {
+export const createProductService = async (
+    productData,
+    files = []
+) => {
 
-        const uploadedImages = [];
+    const uploadedImages = [];
 
-        for (const file of files) {
+    for (const file of files) {
 
-            const result =
-                await uploadToCloudinary(file);
+        const result = await uploadToCloudinary(file);
 
-            uploadedImages.push({
+        uploadedImages.push({
+            url: result.secure_url,
+            publicId: result.public_id,
+        });
 
-                url: result.secure_url,
+    }
 
-                publicId: result.public_id,
+    const slug = slugify(productData.name, {
+        lower: true,
+        strict: true,
+        trim: true,
+    });
 
-            });
+    const product = await createProduct({
 
-        }
+        ...productData,
 
-        const product =
-            await createProduct({
+        slug,
 
-                ...productData,
+        images: uploadedImages,
 
-                images: uploadedImages,
+    });
 
-            });
+    await invalidateProductCache();
 
-        return product;
+    return product;
 
-    };
+};
 
 export const getProductsService = async (query) => {
     const cacheKey = `products:${JSON.stringify(query)}`;
@@ -119,6 +126,14 @@ export const getProductBySlugService = async (slug) => {
 };
 
 export const updateProductService = async (id, payload) => {
+    if (payload.name) {
+        payload.slug = slugify(payload.name, {
+            lower: true,
+            strict: true,
+            trim: true,
+        });
+    }
+
     const product = await updateProduct(id, payload);
 
     if (!product) {
