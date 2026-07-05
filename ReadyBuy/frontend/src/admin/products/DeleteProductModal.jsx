@@ -1,12 +1,12 @@
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Alert from "react-bootstrap/Alert";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { deleteProduct } from "../services/product.admin.service";
-
 import { toast } from "react-toastify";
+
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
+
+import {
+    deleteProduct,
+} from "../services/product.admin.service";
 
 const DeleteProductModal = ({
     show,
@@ -14,115 +14,74 @@ const DeleteProductModal = ({
     product,
 }) => {
 
-    const queryClient = useQueryClient();
+    const queryClient =
+        useQueryClient();
 
-    const mutation = useMutation({
+    const mutation =
+        useMutation({
 
-        mutationFn: () =>
-            deleteProduct(product._id),
+            mutationFn: () =>
+                deleteProduct(
+                    product._id
+                ),
 
-        onSuccess: () => {
+            onSuccess: () => {
 
-            toast.success(
+                toast.success(
+                    "Product deleted successfully."
+                );
 
-                "Product deleted successfully."
+                queryClient.invalidateQueries({
 
-            );
+                    queryKey: [
+                        "products"
+                    ],
 
-            queryClient.invalidateQueries({
+                });
 
-                queryKey: ["products"],
+                handleClose();
 
-            });
+            },
 
-            handleClose();
+            onError: (error) => {
 
-        },
+                toast.error(
 
-        onError: (error) => {
+                    error.response?.data?.message ||
 
-            toast.error(
+                    "Unable to delete product."
 
-                error.response?.data?.message ||
+                );
 
-                "Unable to delete product."
+            },
 
-            );
+        });
 
-        }
+    if (!product) {
 
-    });
+        return null;
 
-    if (!product) return null;
+    }
 
     return (
 
-        <Modal
+        <ConfirmDeleteModal
+
             show={show}
-            onHide={handleClose}
-            centered
-        >
 
-            <Modal.Header closeButton>
+            handleClose={handleClose}
 
-                <Modal.Title>
+            title="Delete Product"
 
-                    Delete Product
+            message={`Are you sure you want to delete "${product.name}"?`}
 
-                </Modal.Title>
+            loading={mutation.isPending}
 
-            </Modal.Header>
+            onConfirm={() =>
+                mutation.mutate()
+            }
 
-            <Modal.Body>
-
-                <Alert variant="warning">
-
-                    Are you sure you want to delete
-
-                    <strong>
-
-                        {" "}
-
-                        {product.name}
-
-                    </strong>
-
-                    ?
-
-                </Alert>
-
-            </Modal.Body>
-
-            <Modal.Footer>
-
-                <Button
-                    variant="secondary"
-                    onClick={handleClose}
-                >
-                    Cancel
-                </Button>
-
-                <Button
-                    variant="danger"
-                    disabled={mutation.isPending}
-                    onClick={() => mutation.mutate()}
-                >
-
-                    {
-
-                        mutation.isPending
-
-                            ? "Deleting..."
-
-                            : "Delete"
-
-                    }
-
-                </Button>
-
-            </Modal.Footer>
-
-        </Modal>
+        />
 
     );
 
