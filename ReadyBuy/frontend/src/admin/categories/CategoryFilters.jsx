@@ -1,6 +1,5 @@
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
+import FilterBar from "../components/FilterBar";
+import SearchInput from "../components/SearchInput";
 
 const CategoryFilters = ({
     search,
@@ -9,23 +8,15 @@ const CategoryFilters = ({
 
     return (
 
-        <Row className="mb-4">
+        <FilterBar>
 
-            <Col md={6}>
+            <SearchInput
+                value={search}
+                onChange={setSearch}
+                placeholder="Search Categories..."
+            />
 
-                <Form.Control
-                    placeholder="Search Categories..."
-                    value={search}
-                    onChange={(e) =>
-                        setSearch(
-                            e.target.value
-                        )
-                    }
-                />
-
-            </Col>
-
-        </Row>
+        </FilterBar>
 
     );
 
