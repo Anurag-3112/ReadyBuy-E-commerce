@@ -1,29 +1,12 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import Badge from "react-bootstrap/Badge";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import Image from "react-bootstrap/Image";
 import ListGroup from "react-bootstrap/ListGroup";
-
-const statusVariant = (status) => {
-    switch (status) {
-        case "PENDING":
-            return "warning";
-        case "PAID":
-            return "primary";
-        case "SHIPPED":
-            return "info";
-        case "DELIVERED":
-            return "success";
-        case "CANCELLED":
-            return "danger";
-        default:
-            return "secondary";
-    }
-};
+import StatusBadge from "../components/StatusBadge";
+import ImageThumbnail from "../components/ImageThumbnail";
 
 const OrderDetailsModal = ({
     show,
@@ -134,13 +117,9 @@ const OrderDetailsModal = ({
 
                                     {" "}
 
-                                    <Badge
-                                        bg={statusVariant(order.status)}
-                                    >
-
-                                        {order.status}
-
-                                    </Badge>
+                                    <StatusBadge
+                                        status={order.status}
+                                    />
 
                                 </ListGroup.Item>
 
@@ -217,28 +196,13 @@ const OrderDetailsModal = ({
 
                                             <td>
 
-                                                <Image
-
+                                                <ImageThumbnail
                                                     src={
-                                                        item.product?.images?.[0] ||
-
-                                                        "/placeholder.png"
+                                                        item.product?.images?.[0]
                                                     }
-
-                                                    width={70}
-
-                                                    height={70}
-
-                                                    rounded
-
-                                                    style={{
-
-                                                        objectFit: "cover"
-
-                                                    }}
-
+                                                    alt={item.name}
+                                                    size={70}
                                                 />
-
                                             </td>
 
                                             <td>
