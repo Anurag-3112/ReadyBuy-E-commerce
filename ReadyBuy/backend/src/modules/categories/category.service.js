@@ -1,34 +1,111 @@
-import Category from "./category.model.js";
+import * as repository from "./category.repository.js";
+import { generateSlug } from "../../shared/utils/slug.js";
 
-export const createCategoryService = (payload) =>
-    Category.create(payload);
+export const createCategoryService =
+    async (payload) => {
 
-export const getCategoriesService = (filter = {}) =>
-    Category.find(filter).sort({
-        createdAt: -1,
-    });
+        payload.slug = generateSlug(
+            payload.name
+        );
 
-export const getAllCategoriesService = () =>
-    Category.find().sort({
-        createdAt: -1,
-    });
+        const existing =
+            await repository.categoryExists(
+                payload.name
+            );
 
-export const getCategoryService = (id) =>
-    Category.findById(id);
+        if (existing) {
+            throw new Error(
+                "Category already exists."
+            );
+        }
 
-export const getCategoryBySlugService = (slug) =>
-    Category.findOne({ slug });
+        const existingSlug =
+            await repository.categorySlugExists(
+                payload.slug
+            );
 
-export const updateCategoryService = (
-    id,
-    payload
+        if (existingSlug) {
+            throw new Error(
+                "Slug already exists."
+            );
+        }
+
+        return repository.createCategory(
+            payload
+        );
+    };
+
+export const getCategoriesService = (
+    query
 ) =>
-    Category.findByIdAndUpdate(id, payload, {
-        new: true,
-    });
+    repository.getCategories(query);
 
-export const deleteCategoryService = (id) =>
-    Category.findByIdAndDelete(id);
+export const getAllCategoriesService =
+    () =>
+        repository.getAllCategories();
 
-export const categoryExists = (name) =>
-    Category.findOne({ name });
+export const getCategoryService = (
+    id
+) =>
+    repository.getCategoryById(id);
+
+export const getCategoryBySlugService =
+    (slug) =>
+        repository.getCategoryBySlug(
+            slug
+        );
+
+export const updateCategoryService =
+    async (id, payload) => {
+
+        payload.slug = generateSlug(
+            payload.name
+        );
+
+        const existingSlug =
+            await repository.categorySlugExists(
+                payload.slug,
+                id
+            );
+
+        if (existingSlug) {
+            throw new Error(
+                "Slug already exists."
+            );
+        }
+
+        return repository.updateCategory(
+            id,
+            payload
+        );
+    };
+
+export const deleteCategoryService =
+    async (id) => {
+
+        const category =
+            await repository.getCategoryById(
+                id
+            );
+
+        if (!category) {
+            throw new Error(
+                "Category not found."
+            );
+        }
+
+        const productCount =
+            await repository.countProductsByCategory(
+                category.slug
+            );
+
+        if (productCount > 0) {
+            throw new Error(
+                "Category contains products."
+            );
+        }
+
+        return repository.deleteCategory(
+            id
+        );
+    };
