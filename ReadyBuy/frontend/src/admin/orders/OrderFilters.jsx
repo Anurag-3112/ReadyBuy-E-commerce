@@ -1,7 +1,8 @@
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+
+import FilterBar from "../components/FilterBar";
+import SearchInput from "../components/SearchInput";
 
 const OrderFilters = ({
     search,
@@ -11,91 +12,70 @@ const OrderFilters = ({
 }) => {
 
     const resetFilters = () => {
+
         setSearch("");
+
         setStatus("");
+
     };
 
     return (
-        <Row className="mb-4">
 
-            <Col md={6}>
+        <FilterBar>
 
-                <Form.Control
-                    type="text"
-                    placeholder="Search by Order ID, Customer..."
-                    value={search}
-                    onChange={(e) =>
-                        setSearch(e.target.value)
-                    }
-                />
+            <SearchInput
+                value={search}
+                onChange={setSearch}
+                placeholder="Search by Order ID, Customer..."
+            />
 
-            </Col>
+            <Form.Select
+                value={status}
+                onChange={(e) =>
+                    setStatus(e.target.value)
+                }
+            >
 
-            <Col md={3}>
+                <option value="">
+                    All Status
+                </option>
 
-                <Form.Select
-                    value={status}
-                    onChange={(e) =>
-                        setStatus(e.target.value)
-                    }
-                >
+                <option value="PENDING">
+                    Pending
+                </option>
 
-                    <option value="">
+                <option value="PAID">
+                    Paid
+                </option>
 
-                        All Status
+                <option value="SHIPPED">
+                    Shipped
+                </option>
 
-                    </option>
+                <option value="DELIVERED">
+                    Delivered
+                </option>
 
-                    <option value="PENDING">
+                <option value="CANCELLED">
+                    Cancelled
+                </option>
 
-                        Pending
+            </Form.Select>
 
-                    </option>
+            <Button
+                variant="secondary"
+                className="w-100"
+                onClick={resetFilters}
+            >
 
-                    <option value="PAID">
+                Reset Filters
 
-                        Paid
+            </Button>
 
-                    </option>
+        </FilterBar>
 
-                    <option value="SHIPPED">
-
-                        Shipped
-
-                    </option>
-
-                    <option value="DELIVERED">
-
-                        Delivered
-
-                    </option>
-
-                    <option value="CANCELLED">
-
-                        Cancelled
-
-                    </option>
-
-                </Form.Select>
-
-            </Col>
-
-            <Col md={3}>
-
-                <Button
-                    variant="secondary"
-                    className="w-100"
-                    onClick={resetFilters}
-                >
-
-                    Reset Filters
-
-                </Button>
-
-            </Col>
-
-        </Row>
     );
+
 };
 
 export default OrderFilters;
