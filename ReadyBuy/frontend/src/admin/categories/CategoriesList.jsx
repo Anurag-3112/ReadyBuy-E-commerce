@@ -1,116 +1,129 @@
 import { useState } from "react";
 
 import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 import { useQuery } from "@tanstack/react-query";
 
 import CategoryTable from "./CategoryTable";
 import CategoryModal from "./CategoryModal";
-import DeleteCategoryModal from "./DeleteCategoryModal";
 import CategoryFilters from "./CategoryFilters";
 
-import Loader from "../components/Loader";
+import LoadingState from "../components/LoadingState";
+import EmptyState from "../components/EmptyState";
+import PageHeader from "../components/PageHeader";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
+import PaginationControls from "../components/PaginationControls";
 
 import {
     getCategories,
+    deleteCategory,
 } from "../services/category.admin.service";
 
 const CategoriesList = () => {
 
+    const [page, setPage] = useState(1);
+
     const [search, setSearch] =
+        useState("");
+
+    const [status, setStatus] =
         useState("");
 
     const [showModal, setShowModal] =
         useState(false);
 
-    const [selectedCategory,
-        setSelectedCategory] =
-        useState(null);
+    const [
+        selectedCategory,
+        setSelectedCategory,
+    ] = useState(null);
 
-    const [deleteCategory,
-        setDeleteCategory] =
-        useState(null);
+    const [
+        deleteCategoryItem,
+        setDeleteCategoryItem,
+    ] = useState(null);
 
     const {
-        data = [],
+        data,
         isLoading,
         isError,
     } = useQuery({
 
         queryKey: [
-            "categories"
+            "categories",
+            page,
+            search,
+            status,
         ],
 
-        queryFn: getCategories,
+        queryFn: () =>
+            getCategories({
+                page,
+                search,
+                status,
+            }),
 
     });
 
     if (isLoading) {
-
-        return <Loader />;
-
+        return <LoadingState />;
     }
 
     if (isError) {
-
-        return <div>
-
-            Failed to load categories.
-
-        </div>;
-
+        return (
+            <EmptyState
+                title="Failed to load categories"
+                subtitle="Please try again."
+            />
+        );
     }
 
-    const filtered =
-        data.filter(category =>
+    const categories =
+        data?.docs || [];
 
-            category.name
-                .toLowerCase()
-                .includes(
-                    search.toLowerCase()
-                )
+    const handleDelete = async () => {
 
-        );
+        if (!deleteCategoryItem) return;
+
+        try {
+
+            await deleteCategory(
+                deleteCategoryItem.id
+            );
+
+            setDeleteCategoryItem(null);
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    };
 
     return (
 
         <>
 
-            <Row className="mb-4">
-
-                <Col>
-
-                    <h2>
-
-                        Categories
-
-                    </h2>
-
-                </Col>
-
-                <Col className="text-end">
-
+            <PageHeader
+                title="Categories"
+                action={
                     <Button
-
                         onClick={() => {
 
-                            setSelectedCategory(null);
+                            setSelectedCategory(
+                                null
+                            );
 
-                            setShowModal(true);
+                            setShowModal(
+                                true
+                            );
 
                         }}
-
                     >
-
                         Add Category
-
                     </Button>
-
-                </Col>
-
-            </Row>
+                }
+            />
 
             <CategoryFilters
 
@@ -118,21 +131,66 @@ const CategoriesList = () => {
 
                 setSearch={setSearch}
 
+                status={status}
+
+                setStatus={setStatus}
+
             />
 
-            <CategoryTable
+            {categories.length === 0 ? (
 
-                categories={filtered}
+                <EmptyState
+                    title="No Categories"
+                    subtitle="Create your first category."
+                />
 
-                onEdit={(category) => {
+            ) : (
 
-                    setSelectedCategory(category);
+                <CategoryTable
 
-                    setShowModal(true);
+                    categories={categories}
 
-                }}
+                    onEdit={(category) => {
 
-                onDelete={setDeleteCategory}
+                        setSelectedCategory(
+                            category
+                        );
+
+                        setShowModal(
+                            true
+                        );
+
+                    }}
+
+                    onDelete={
+                        setDeleteCategoryItem
+                    }
+
+                />
+
+            )}
+
+            <PaginationControls
+
+                page={
+                    data?.page || page
+                }
+
+                hasPrevPage={
+                    data?.hasPrevPage
+                }
+
+                hasNextPage={
+                    data?.hasNextPage
+                }
+
+                onPrevious={() =>
+                    setPage((p) => p - 1)
+                }
+
+                onNext={() =>
+                    setPage((p) => p + 1)
+                }
 
             />
 
@@ -140,27 +198,33 @@ const CategoriesList = () => {
 
                 show={showModal}
 
-                handleClose={() => {
+                handleClose={() =>
+                    setShowModal(false)
+                }
 
-                    setShowModal(false);
-
-                }}
-
-                category={selectedCategory}
+                category={
+                    selectedCategory
+                }
 
             />
 
-            <DeleteCategoryModal
+            <ConfirmDeleteModal
 
-                show={!!deleteCategory}
+                show={!!deleteCategoryItem}
 
-                handleClose={() => {
+                handleClose={() =>
+                    setDeleteCategoryItem(
+                        null
+                    )
+                }
 
-                    setDeleteCategory(null);
+                title="Delete Category"
 
-                }}
+                message={`Are you sure you want to delete "${deleteCategoryItem?.name}"?`}
 
-                category={deleteCategory}
+                loading={false}
+
+                onConfirm={handleDelete}
 
             />
 
