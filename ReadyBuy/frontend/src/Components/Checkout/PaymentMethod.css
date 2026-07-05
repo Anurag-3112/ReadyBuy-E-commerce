@@ -1,0 +1,125 @@
+.payment-method {
+    background: #ffffff;
+    border: 1px solid rgba(184, 150, 104, .15);
+    border-radius: 28px;
+    padding: 40px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, .06);
+}
+
+.payment-method h4 {
+    color: #2f2418;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 28px;
+    position: relative;
+}
+
+.payment-method h4::after {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 4px;
+    margin-top: 12px;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #b89668, #d7b98c);
+}
+
+.payment-option {
+    border: 1px solid rgba(184, 150, 104, .18);
+    border-radius: 18px;
+    background: #fcfaf7;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    transition: all .3s ease;
+}
+
+.payment-option:hover {
+    transform: translateY(-2px);
+    border-color: #b89668;
+    box-shadow: 0 10px 25px rgba(184, 150, 104, .12);
+}
+
+.payment-option.active {
+    border: 2px solid #b89668;
+    background: rgba(184, 150, 104, .08);
+}
+
+.payment-option.disabled {
+    opacity: .65;
+}
+
+.payment-option .form-check {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.payment-option .form-check-input {
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
+    cursor: pointer;
+    border-color: #b89668;
+}
+
+.payment-option .form-check-input:checked {
+    background-color: #b89668;
+    border-color: #b89668;
+}
+
+.payment-option .form-check-label {
+    width: 100%;
+    margin-left: 12px;
+    cursor: pointer;
+}
+
+.payment-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    color: #2f2418;
+    font-weight: 600;
+}
+
+.coming-badge {
+    background: #b89668 !important;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: .75rem;
+    font-weight: 500;
+}
+
+@media (max-width:768px) {
+
+    .payment-method {
+        padding: 26px;
+        border-radius: 22px;
+    }
+
+    .payment-method h4 {
+        font-size: 1.6rem;
+    }
+
+    .payment-label {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+}
+
+@media (max-width:480px) {
+
+    .payment-method {
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .payment-method h4 {
+        font-size: 1.4rem;
+    }
+
+}
