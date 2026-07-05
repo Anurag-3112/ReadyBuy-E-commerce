@@ -1,37 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
+
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 
 import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Tooltip,
-    Legend,
-} from "chart.js";
+    FaRupeeSign,
+    FaShoppingCart,
+    FaBox,
+    FaUsers,
+    FaClock,
+    FaCheckCircle,
+} from "react-icons/fa";
 
-import { Line } from "react-chartjs-2";
-
-import AdminLayout from "../layout/AdminLayout";
-import Loader from "../components/Loader";
-import StatCard from "../components/StatCard";
+import LoadingState from "../components/LoadingState";
+import PageHeader from "../components/PageHeader";
+import StatsCard from "../components/StatsCard";
+import SalesChart from "../components/SalesChart";
 
 import {
     getDashboardStats,
     getMonthlyRevenue,
 } from "../services/admin.service";
-
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Tooltip,
-    Legend
-);
 
 const Dashboard = () => {
 
@@ -51,7 +41,7 @@ const Dashboard = () => {
 
     const {
 
-        data: revenue,
+        data: revenue = [],
 
     } = useQuery({
 
@@ -61,100 +51,128 @@ const Dashboard = () => {
 
     });
 
-    if (isLoading)
-        return <Loader />;
+    if (isLoading) {
 
-    const chartData = {
+        return <LoadingState />;
 
-        labels:
-            revenue?.map(item => {
+    }
 
-                return `${item._id.month}/${item._id.year}`;
+    const sales = {
 
-            }) || [],
+        labels: revenue.map(item =>
+            `${item._id.month}/${item._id.year}`
+        ),
 
-        datasets: [
-
-            {
-
-                label: "Revenue",
-
-                data:
-
-                    revenue?.map(
-
-                        item => item.revenue
-
-                    ) || [],
-
-                borderWidth: 3,
-
-                fill: false,
-
-            }
-
-        ]
+        data: revenue.map(
+            item => item.revenue
+        ),
 
     };
 
     return (
 
-        <AdminLayout>
+        <>
 
-            <h2 className="mb-4">
-
-                Dashboard
-
-            </h2>
+            <PageHeader
+                title="Dashboard"
+            />
 
             <Row className="g-4">
 
                 <Col md={4}>
-                    <StatCard
+
+                    <StatsCard
+
                         title="Revenue"
+
                         value={`₹${stats.revenue}`}
-                        color="#0d6efd"
+
+                        color="primary"
+
+                        icon={<FaRupeeSign />}
+
                     />
+
                 </Col>
 
                 <Col md={4}>
-                    <StatCard
+
+                    <StatsCard
+
                         title="Orders"
+
                         value={stats.orders}
-                        color="#198754"
+
+                        color="success"
+
+                        icon={<FaShoppingCart />}
+
                     />
+
                 </Col>
 
                 <Col md={4}>
-                    <StatCard
+
+                    <StatsCard
+
                         title="Products"
+
                         value={stats.products}
-                        color="#fd7e14"
+
+                        color="warning"
+
+                        icon={<FaBox />}
+
                     />
+
                 </Col>
 
                 <Col md={4}>
-                    <StatCard
+
+                    <StatsCard
+
                         title="Users"
+
                         value={stats.users}
-                        color="#6f42c1"
+
+                        color="info"
+
+                        icon={<FaUsers />}
+
                     />
+
                 </Col>
 
                 <Col md={4}>
-                    <StatCard
-                        title="Pending"
+
+                    <StatsCard
+
+                        title="Pending Orders"
+
                         value={stats.pendingOrders}
-                        color="#dc3545"
+
+                        color="danger"
+
+                        icon={<FaClock />}
+
                     />
+
                 </Col>
 
                 <Col md={4}>
-                    <StatCard
-                        title="Delivered"
+
+                    <StatsCard
+
+                        title="Delivered Orders"
+
                         value={stats.deliveredOrders}
-                        color="#20c997"
+
+                        color="success"
+
+                        icon={<FaCheckCircle />}
+
                     />
+
                 </Col>
 
             </Row>
@@ -169,13 +187,15 @@ const Dashboard = () => {
 
                     </h4>
 
-                    <Line data={chartData} />
+                    <SalesChart
+                        sales={sales}
+                    />
 
                 </Card.Body>
 
             </Card>
 
-        </AdminLayout>
+        </>
 
     );
 
