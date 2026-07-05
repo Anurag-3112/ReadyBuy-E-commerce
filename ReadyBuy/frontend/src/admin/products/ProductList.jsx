@@ -1,58 +1,50 @@
 import { useState } from "react";
-import ProductModal from "./ProductModal";
-import { useQuery } from "@tanstack/react-query";
-import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
 
-import Loader from "../components/Loader";
+import Button from "react-bootstrap/Button";
+import Stack from "react-bootstrap/Stack";
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { toast } from "react-toastify";
+
+import ProductModal from "./ProductModal";
+
+import LoadingState from "../components/LoadingState";
+import PageHeader from "../components/PageHeader";
+import SearchInput from "../components/SearchInput";
+import DataTable from "../components/DataTable";
+import StatusBadge from "../components/StatusBadge";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 
 import {
     getProducts,
+    deleteProduct,
 } from "../services/product.admin.service";
 
-import DeleteProductModal from "./DeleteProductModal";
-
-
-
 const ProductList = () => {
+
+    const queryClient =
+        useQueryClient();
 
     const [showModal, setShowModal] =
         useState(false);
 
-    const [selectedProduct, setSelectedProduct] =
-        useState(null);
+    const [
+        selectedProduct,
+        setSelectedProduct,
+    ] = useState(null);
 
-    const [showDeleteModal, setShowDeleteModal] =
-        useState(false);
-
-    const [deleteProductData, setDeleteProductData] =
-        useState(null);
+    const [
+        deleteProductData,
+        setDeleteProductData,
+    ] = useState(null);
 
     const [search, setSearch] =
         useState("");
 
-    const filteredProducts =
-
-        data.docs.filter(product =>
-
-            product.name
-
-                .toLowerCase()
-
-                .includes(
-
-                    search.toLowerCase()
-
-                )
-
-        );
-
     const {
-
         data,
-
         isLoading,
-
     } = useQuery({
 
         queryKey: ["products"],
@@ -61,120 +53,185 @@ const ProductList = () => {
 
     });
 
-    if (isLoading)
-        return <Loader />;
+    const deleteMutation =
+        useMutation({
+
+            mutationFn: (id) =>
+                deleteProduct(id),
+
+            onSuccess: () => {
+
+                toast.success(
+                    "Product deleted successfully."
+                );
+
+                queryClient.invalidateQueries({
+
+                    queryKey: [
+                        "products",
+                    ],
+
+                });
+
+                setDeleteProductData(
+                    null
+                );
+
+            },
+
+            onError: (error) => {
+
+                toast.error(
+
+                    error.response?.data
+                        ?.message ||
+
+                    "Unable to delete product."
+
+                );
+
+            },
+
+        });
+
+    if (isLoading) {
+
+        return <LoadingState />;
+
+    }
+
+    const filteredProducts =
+        data.docs.filter(product =>
+            product.name
+                .toLowerCase()
+                .includes(
+                    search.toLowerCase()
+                )
+        );
+
+    const columns = [
+
+        "Name",
+
+        "Category",
+
+        "Price",
+
+        "Stock",
+
+        "Status",
+
+        "Actions",
+
+    ];
 
     return (
 
         <>
 
-            <div className="d-flex justify-content-between mb-4">
+            <PageHeader
 
-                <h2>
+                title="Products"
 
-                    Products
+                action={
 
-                </h2>
+                    <Button
+                        onClick={() => {
 
-                <Button
-                    onClick={() => {
+                            setSelectedProduct(
+                                null
+                            );
 
-                        setSelectedProduct(null);
+                            setShowModal(
+                                true
+                            );
 
-                        setShowModal(true);
+                        }}
+                    >
 
-                    }}
-                >
+                        Add Product
 
-                    Add Product
-
-                </Button>
-
-            </div>
-            <Form.Control
-
-                placeholder="Search products..."
-
-                className="mb-3"
-
-                value={search}
-
-                onChange={(e) =>
-
-                    setSearch(e.target.value)
+                    </Button>
 
                 }
 
             />
-            <Table
-                striped
-                bordered
-                hover
-            >
 
-                <thead>
+            <SearchInput
 
-                    <tr>
+                value={search}
 
-                        <th>Name</th>
+                onChange={setSearch}
 
-                        <th>Category</th>
+                placeholder="Search products..."
 
-                        <th>Price</th>
+            />
 
-                        <th>Stock</th>
+            <div className="mt-3">
 
-                        <th>Status</th>
+                <DataTable
 
-                        <th>Actions</th>
+                    columns={columns}
 
-                    </tr>
+                    data={filteredProducts}
 
-                </thead>
+                    emptyTitle="No Products"
 
-                <tbody>
+                    emptySubtitle="Create your first product."
 
-                    {
+                    renderRow={(product) => (
 
-                        filteredProducts.map(product => (
+                        <tr
+                            key={product._id}
+                        >
 
-                            <tr
-                                key={product._id}
-                            >
+                            <td>
 
-                                <td>
+                                {product.name}
 
-                                    {product.name}
+                            </td>
 
-                                </td>
+                            <td>
 
-                                <td>
+                                {product.category}
 
-                                    {product.category}
+                            </td>
 
-                                </td>
+                            <td>
 
-                                <td>
+                                ₹
 
-                                    ₹
+                                {
+                                    product.price
+                                        .discounted
+                                }
 
-                                    {product.price.discounted}
+                            </td>
 
-                                </td>
+                            <td>
 
-                                <td>
+                                {product.stock}
 
-                                    {product.stock}
+                            </td>
 
-                                </td>
+                            <td>
 
-                                <td>
+                                <StatusBadge
 
-                                    {product.status}
+                                    status={
+                                        product.status
+                                    }
 
-                                </td>
+                                />
 
-                                <td>
+                            </td>
+
+                            <td>
+
+                                <Stack
+                                    direction="horizontal"
+                                    gap={2}
+                                >
 
                                     <Button
 
@@ -182,9 +239,13 @@ const ProductList = () => {
 
                                         onClick={() => {
 
-                                            setSelectedProduct(product);
+                                            setSelectedProduct(
+                                                product
+                                            );
 
-                                            setShowModal(true);
+                                            setShowModal(
+                                                true
+                                            );
 
                                         }}
 
@@ -194,64 +255,87 @@ const ProductList = () => {
 
                                     </Button>
 
-                                    {" "}
-
                                     <Button
+
                                         variant="danger"
+
                                         size="sm"
-                                        onClick={() => {
 
-                                            setDeleteProductData(product);
+                                        onClick={() =>
 
-                                            setShowDeleteModal(true);
+                                            setDeleteProductData(
+                                                product
+                                            )
 
-                                        }}
+                                        }
+
                                     >
 
                                         Delete
 
                                     </Button>
 
-                                </td>
+                                </Stack>
 
-                            </tr>
+                            </td>
 
-                        ))
+                        </tr>
 
-                    }
+                    )}
 
-                </tbody>
+                />
 
-            </Table>
+            </div>
+
             <ProductModal
 
                 show={showModal}
 
                 handleClose={() => {
 
-                    setShowModal(false);
+                    setShowModal(
+                        false
+                    );
 
-                    setSelectedProduct(null);
+                    setSelectedProduct(
+                        null
+                    );
 
                 }}
 
-                product={selectedProduct}
+                product={
+                    selectedProduct
+                }
 
             />
 
-            <DeleteProductModal
+            <ConfirmDeleteModal
 
-                show={showDeleteModal}
+                show={
+                    !!deleteProductData
+                }
 
-                product={deleteProductData}
+                handleClose={() =>
+                    setDeleteProductData(
+                        null
+                    )
+                }
 
-                handleClose={() => {
+                title="Delete Product"
 
-                    setDeleteProductData(null);
+                message={`Are you sure you want to delete "${deleteProductData?.name}"?`}
 
-                    setShowDeleteModal(false);
+                loading={
+                    deleteMutation.isPending
+                }
 
-                }}
+                onConfirm={() =>
+
+                    deleteMutation.mutate(
+                        deleteProductData._id
+                    )
+
+                }
 
             />
 
