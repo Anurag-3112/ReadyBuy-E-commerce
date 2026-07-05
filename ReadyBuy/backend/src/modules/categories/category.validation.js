@@ -1,31 +1,26 @@
 import Joi from "joi";
 
-export const categorySchema =
-    Joi.object({
+export const categorySchema = Joi.object({
 
-        name:
-            Joi.string()
+    name: Joi.string()
+        .min(2)
+        .max(100)
+        .trim()
+        .required(),
 
-                .trim()
+    description: Joi.string()
+        .max(500)
+        .allow(""),
 
-                .required(),
+    image: Joi.string()
+        .uri()
+        .allow(""),
 
-        description:
-            Joi.string()
+    status: Joi.string()
+        .valid(
+            "ACTIVE",
+            "INACTIVE"
+        )
+        .required(),
 
-                .allow(""),
-
-        image:
-            Joi.string()
-
-                .allow(""),
-
-        status:
-            Joi.string()
-
-                .valid(
-                    "ACTIVE",
-                    "INACTIVE"
-                )
-
-    });
+});
