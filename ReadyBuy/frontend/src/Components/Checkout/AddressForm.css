@@ -1,0 +1,133 @@
+.address-form {
+    background: #ffffff;
+    border: 1px solid rgba(184, 150, 104, 0.15);
+    border-radius: 28px;
+    padding: 42px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+    transition: all 0.35s ease;
+}
+
+.address-form:hover {
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.08);
+}
+
+.address-form h4 {
+    color: #2f2418;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+    position: relative;
+    letter-spacing: 0.4px;
+}
+
+.address-form h4::after {
+    content: "";
+    width: 70px;
+    height: 4px;
+    margin-top: 12px;
+    display: block;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #b89668, #d7b98c);
+}
+
+.address-form .form-label {
+    color: #4d4033;
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+}
+
+.address-form .form-control {
+    height: 58px;
+    border-radius: 16px;
+    border: 1px solid rgba(184, 150, 104, 0.18);
+    background: #fcfaf8;
+    color: #2f2418;
+    font-size: 1rem;
+    padding: 0 18px;
+    transition: all 0.3s ease;
+    box-shadow: none;
+}
+
+.address-form textarea.form-control {
+    min-height: 130px;
+    padding: 16px 18px;
+    resize: vertical;
+}
+
+.address-form .form-control::placeholder {
+    color: #a99d92;
+    transition: opacity 0.3s ease;
+}
+
+.address-form .form-control:focus::placeholder {
+    opacity: 0.55;
+}
+
+.address-form .form-control:hover {
+    border-color: rgba(184, 150, 104, 0.45);
+    background: #ffffff;
+}
+
+.address-form .form-control:focus {
+    background: #ffffff;
+    border-color: #b89668;
+    box-shadow: 0 0 0 4px rgba(184, 150, 104, 0.12);
+}
+
+.address-form .row {
+    --bs-gutter-x: 1.5rem;
+}
+
+.address-form .mb-3 {
+    margin-bottom: 1.5rem !important;
+}
+
+@media (max-width: 992px) {
+    .address-form {
+        padding: 34px;
+    }
+
+    .address-form h4 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .address-form {
+        padding: 26px;
+        border-radius: 22px;
+    }
+
+    .address-form h4 {
+        font-size: 1.6rem;
+        margin-bottom: 26px;
+    }
+
+    .address-form .form-control {
+        height: 54px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .address-form {
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .address-form h4 {
+        font-size: 1.4rem;
+    }
+
+    .address-form .form-control {
+        height: 50px;
+        padding: 0 14px;
+        border-radius: 14px;
+    }
+
+    .address-form .row {
+        --bs-gutter-x: 0;
+    }
+}
