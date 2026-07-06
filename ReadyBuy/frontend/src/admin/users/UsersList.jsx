@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-import { useQuery } from "@tanstack/react-query";
+import {
+    useQuery,
+    useMutation,
+    useQueryClient,
+} from "@tanstack/react-query";
 
 import LoadingState from "../components/LoadingState";
 import EmptyState from "../components/EmptyState";
@@ -13,7 +17,11 @@ import UserDetailsModal from "./UserDetailsModal";
 
 import {
     getUsers,
+    deleteUser,
 } from "../services/user.admin.service";
+
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
+import { toast } from "react-toastify";
 
 const UsersList = () => {
 
@@ -38,6 +46,13 @@ const UsersList = () => {
         showDetails,
         setShowDetails,
     ] = useState(false);
+
+    const queryClient = useQueryClient();
+
+    const [
+        deleteUserData,
+        setDeleteUserData,
+    ] = useState(null);
 
     const {
         data,
@@ -69,6 +84,38 @@ const UsersList = () => {
 
         placeholderData:
             previousData => previousData,
+
+    });
+
+    const deleteMutation = useMutation({
+
+        mutationFn: deleteUser,
+
+        onSuccess: () => {
+
+            toast.success(
+                "User deleted successfully."
+            );
+
+            queryClient.invalidateQueries({
+                queryKey: ["users"],
+            });
+
+            setDeleteUserData(null);
+
+        },
+
+        onError: (error) => {
+
+            toast.error(
+
+                error.response?.data?.message ||
+
+                "Unable to delete user."
+
+            );
+
+        },
 
     });
 
@@ -144,9 +191,36 @@ const UsersList = () => {
 
                     }}
 
+                    onDelete={(user) =>
+
+                        setDeleteUserData(user)
+
+                    }
+
                 />
 
             )}
+            <ConfirmDeleteModal
+
+                show={!!deleteUserData}
+
+                handleClose={() =>
+                    setDeleteUserData(null)
+                }
+
+                title="Delete User"
+
+                message={`Are you sure you want to delete "${deleteUserData?.name}"?`}
+
+                loading={deleteMutation.isPending}
+
+                onConfirm={() =>
+                    deleteMutation.mutate(
+                        deleteUserData._id
+                    )
+                }
+
+            />
 
             <PaginationControls
 
