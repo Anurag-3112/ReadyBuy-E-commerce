@@ -67,36 +67,26 @@ export const createProductService = async (
     const uploadedImages = [];
 
     for (const file of files) {
-
         const result = await uploadToCloudinary(file);
 
         uploadedImages.push({
             url: result.secure_url,
             publicId: result.public_id,
         });
-
     }
 
-    const slug = slugify(productData.name, {
-        lower: true,
-        strict: true,
-        trim: true,
-    });
-
     const product = await createProduct({
-
         ...productData,
 
-        slug,
+        slug: slugify(productData.name, {
+            lower: true,
+            strict: true,
+        }),
 
         images: uploadedImages,
-
     });
 
-    await invalidateProductCache();
-
     return product;
-
 };
 
 export const getProductsService = async (query) => {
