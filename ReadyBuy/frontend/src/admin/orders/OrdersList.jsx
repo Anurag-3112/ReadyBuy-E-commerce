@@ -2,8 +2,11 @@ import { useState } from "react";
 
 import Button from "react-bootstrap/Button";
 
-import { useQuery } from "@tanstack/react-query";
-
+import {
+    useQuery,
+    useMutation,
+    useQueryClient,
+} from "@tanstack/react-query";
 import LoadingState from "../components/LoadingState";
 import EmptyState from "../components/EmptyState";
 import PageHeader from "../components/PageHeader";
@@ -13,7 +16,13 @@ import OrderFilters from "./OrderFilters";
 import OrderTable from "./OrderTable";
 import OrderDetailsModal from "./OrderDetailsModal";
 
-import { getOrders } from "../services/order.admin.service";
+import {
+    getOrders,
+    deleteOrder,
+} from "../services/order.admin.service";
+
+import { toast } from "react-toastify";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 
 const OrdersList = () => {
 
@@ -35,11 +44,15 @@ const OrdersList = () => {
         setShowDetails,
     ] = useState(false);
 
+    const queryClient = useQueryClient();
+
+    const [deleteOrderData, setDeleteOrderData] =
+        useState(null);
+
     const {
         data,
         isLoading,
         isError,
-        refetch,
     } = useQuery({
 
         queryKey: [
@@ -76,6 +89,39 @@ const OrdersList = () => {
 
     };
 
+    const deleteMutation = useMutation({
+
+        mutationFn: deleteOrder,
+
+        onSuccess: () => {
+
+            toast.success(
+                "Order deleted successfully."
+            );
+
+            queryClient.invalidateQueries({
+                queryKey: ["orders"],
+            });
+
+            setDeleteOrderData(null);
+
+        },
+
+        onError: (error) => {
+
+            toast.error(
+
+                error.response?.data?.message ||
+
+                "Unable to delete order."
+
+            );
+
+        },
+
+    });
+
+
     if (isLoading) {
         return <LoadingState />;
     }
@@ -92,7 +138,27 @@ const OrdersList = () => {
     return (
 
         <>
+            <ConfirmDeleteModal
 
+                show={!!deleteOrderData}
+
+                handleClose={() =>
+                    setDeleteOrderData(null)
+                }
+
+                title="Delete Order"
+
+                message={`Are you sure you want to delete order "${deleteOrderData?._id}"?`}
+
+                loading={deleteMutation.isPending}
+
+                onConfirm={() =>
+                    deleteMutation.mutate(
+                        deleteOrderData._id
+                    )
+                }
+
+            />
             <PageHeader
                 title="Orders"
             />
@@ -119,13 +185,11 @@ const OrdersList = () => {
             ) : (
 
                 <OrderTable
-
                     orders={data.docs}
-
                     onView={openDetails}
-
-                    refetch={refetch}
-
+                    onDelete={(order) =>
+                        setDeleteOrderData(order)
+                    }
                 />
 
             )}
