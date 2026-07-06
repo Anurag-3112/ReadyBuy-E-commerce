@@ -29,6 +29,7 @@ router.patch(
     "/:id",
     authenticate,
     authorize("ADMIN"),
+    upload.array("images", 5),
     updateProduct
 );
 
