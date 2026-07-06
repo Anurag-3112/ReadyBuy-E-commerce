@@ -5,7 +5,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Image from "react-bootstrap/Image";
-import Badge from "react-bootstrap/Badge";
 
 const initialState = {
     name: "",
@@ -25,62 +24,112 @@ const ProductForm = ({
     onSubmit,
     loading = false,
 }) => {
+
     const [form, setForm] = useState(initialState);
+
     const [images, setImages] = useState([]);
+
     const [previewImages, setPreviewImages] = useState([]);
-    const [errors, setErrors] = useState({});
+
     const [existingImages, setExistingImages] = useState([]);
 
+    const [errors, setErrors] = useState({});
+
     useEffect(() => {
+
         if (initialData) {
+
             setForm({
+
                 name: initialData.name || "",
-                description: initialData.description || "",
-                brand: initialData.brand || "",
-                category: initialData.category || "men",
-                originalPrice: initialData.price?.original || "",
-                discountedPrice: initialData.price?.discounted || "",
-                stock: initialData.stock || "",
-                status: initialData.status || "ACTIVE",
-                isFeatured: initialData.isFeatured || false,
-                isNewArrival: initialData.isNewArrival || false,
+
+                description:
+                    initialData.description || "",
+
+                brand:
+                    initialData.brand || "",
+
+                category:
+                    initialData.category || "men",
+
+                originalPrice:
+                    initialData.price?.original || "",
+
+                discountedPrice:
+                    initialData.price?.discounted || "",
+
+                stock:
+                    initialData.stock || "",
+
+                status:
+                    initialData.status || "ACTIVE",
+
+                isFeatured:
+                    initialData.isFeatured || false,
+
+                isNewArrival:
+                    initialData.isNewArrival || false,
+
             });
 
-            // Show existing images while editing
-            if (initialData.images?.length) {
-                setExistingImages(initialData.images || []);
-            }
+            setExistingImages(
+                initialData.images || []
+            );
+
         } else {
+
             setForm(initialState);
+
             setImages([]);
+
             setPreviewImages([]);
+
+            setExistingImages([]);
+
         }
+
     }, [initialData]);
 
-    // Cleanup object URLs
     useEffect(() => {
+
         return () => {
+
             previewImages.forEach((img) => {
-                if (typeof img === "string" && img.startsWith("blob:")) {
+
+                if (
+                    img.startsWith("blob:")
+                ) {
+
                     URL.revokeObjectURL(img);
+
                 }
+
             });
+
         };
+
     }, [previewImages]);
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+
+        const {
+            name,
+            value,
+            checked,
+            type,
+        } = e.target;
 
         setForm((prev) => ({
-            ...prev,
-            [name]: type === "checkbox" ? checked : value,
-        }));
-    };
 
-    const removeExistingImage = (index) => {
-        setExistingImages((prev) =>
-            prev.filter((_, i) => i !== index)
-        );
+            ...prev,
+
+            [name]:
+                type === "checkbox"
+                    ? checked
+                    : value,
+
+        }));
+
     };
 
     const validate = () => {
@@ -108,7 +157,15 @@ const ProductForm = ({
 
         }
 
+        if (!form.category) {
+
+            validationErrors.category =
+                "Please select a category.";
+
+        }
+
         if (
+            !form.originalPrice ||
             Number(form.originalPrice) <= 0
         ) {
 
@@ -118,6 +175,7 @@ const ProductForm = ({
         }
 
         if (
+            !form.discountedPrice ||
             Number(form.discountedPrice) <= 0
         ) {
 
@@ -137,6 +195,7 @@ const ProductForm = ({
         }
 
         if (
+            form.stock === "" ||
             Number(form.stock) < 0
         ) {
 
@@ -151,7 +210,7 @@ const ProductForm = ({
         ) {
 
             validationErrors.images =
-                "Upload at least one product image.";
+                "Please upload at least one product image.";
 
         }
 
@@ -165,37 +224,73 @@ const ProductForm = ({
     };
 
     const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
 
-        // Remove old blob URLs
+        const files = Array.from(
+            e.target.files
+        );
+
         previewImages.forEach((img) => {
-            if (img.startsWith("blob:")) {
+
+            if (
+                img.startsWith("blob:")
+            ) {
+
                 URL.revokeObjectURL(img);
+
             }
+
         });
 
         setImages(files);
 
-        const previews = files.map((file) =>
-            URL.createObjectURL(file)
+        setPreviewImages(
+
+            files.map((file) =>
+                URL.createObjectURL(file)
+            )
+
         );
 
-        setPreviewImages(previews);
     };
 
     const removeImage = (index) => {
-        const updatedImages = [...images];
-        const updatedPreviews = [...previewImages];
 
-        if (updatedPreviews[index]?.startsWith("blob:")) {
-            URL.revokeObjectURL(updatedPreviews[index]);
+        const updatedImages = [...images];
+
+        const updatedPreview = [
+            ...previewImages,
+        ];
+
+        if (
+            updatedPreview[index]?.startsWith(
+                "blob:"
+            )
+        ) {
+
+            URL.revokeObjectURL(
+                updatedPreview[index]
+            );
+
         }
 
         updatedImages.splice(index, 1);
-        updatedPreviews.splice(index, 1);
+
+        updatedPreview.splice(index, 1);
 
         setImages(updatedImages);
-        setPreviewImages(updatedPreviews);
+
+        setPreviewImages(updatedPreview);
+
+    };
+
+    const removeExistingImage = (index) => {
+
+        setExistingImages((prev) =>
+            prev.filter(
+                (_, i) => i !== index
+            )
+        );
+
     };
 
     const handleSubmit = (e) => {
@@ -206,7 +301,10 @@ const ProductForm = ({
 
         const formData = new FormData();
 
-        formData.append("name", form.name.trim());
+        formData.append(
+            "name",
+            form.name.trim()
+        );
 
         formData.append(
             "description",
@@ -277,42 +375,74 @@ const ProductForm = ({
 
     return (
         <Card className="shadow-sm border-0">
-
             <Card.Body>
 
-                <Form
-                    onSubmit={handleSubmit}
-                >
+                <Form onSubmit={handleSubmit}>
+
+                    {/* Product Name & Brand */}
+
                     <Row>
+
                         <Col md={6}>
+
                             <Form.Group className="mb-3">
-                                <Form.Label>Product Name</Form.Label>
+
+                                <Form.Label>
+                                    Product Name
+                                </Form.Label>
+
                                 <Form.Control
                                     type="text"
                                     name="name"
                                     value={form.name}
                                     onChange={handleChange}
-                                    required
                                 />
+
+                                {errors.name && (
+                                    <small className="text-danger">
+                                        {errors.name}
+                                    </small>
+                                )}
+
                             </Form.Group>
+
                         </Col>
 
                         <Col md={6}>
+
                             <Form.Group className="mb-3">
-                                <Form.Label>Brand</Form.Label>
+
+                                <Form.Label>
+                                    Brand
+                                </Form.Label>
+
                                 <Form.Control
                                     type="text"
                                     name="brand"
                                     value={form.brand}
                                     onChange={handleChange}
-                                    required
                                 />
+
+                                {errors.brand && (
+                                    <small className="text-danger">
+                                        {errors.brand}
+                                    </small>
+                                )}
+
                             </Form.Group>
+
                         </Col>
+
                     </Row>
 
+                    {/* Description */}
+
                     <Form.Group className="mb-3">
-                        <Form.Label>Description</Form.Label>
+
+                        <Form.Label>
+                            Description
+                        </Form.Label>
+
                         <Form.Control
                             as="textarea"
                             rows={4}
@@ -320,12 +450,26 @@ const ProductForm = ({
                             value={form.description}
                             onChange={handleChange}
                         />
+
+                        {errors.description && (
+                            <small className="text-danger">
+                                {errors.description}
+                            </small>
+                        )}
+
                     </Form.Group>
 
+                    {/* Category & Stock */}
+
                     <Row>
+
                         <Col md={6}>
+
                             <Form.Group className="mb-3">
-                                <Form.Label>Category</Form.Label>
+
+                                <Form.Label>
+                                    Category
+                                </Form.Label>
 
                                 <Form.Select
                                     name="category"
@@ -333,13 +477,21 @@ const ProductForm = ({
                                     onChange={handleChange}
                                 >
                                     <option value="">
-
-                                        All Categories
-
+                                        Select Category
                                     </option>
-                                    <option value="men">Men</option>
-                                    <option value="women">Women</option>
-                                    <option value="kids">Kids</option>
+
+                                    <option value="men">
+                                        Men
+                                    </option>
+
+                                    <option value="women">
+                                        Women
+                                    </option>
+
+                                    <option value="kids">
+                                        Kids
+                                    </option>
+
                                 </Form.Select>
 
                                 {errors.category && (
@@ -347,12 +499,19 @@ const ProductForm = ({
                                         {errors.category}
                                     </small>
                                 )}
+
                             </Form.Group>
+
                         </Col>
 
                         <Col md={6}>
+
                             <Form.Group className="mb-3">
-                                <Form.Label>Stock</Form.Label>
+
+                                <Form.Label>
+                                    Stock
+                                </Form.Label>
+
                                 <Form.Control
                                     type="number"
                                     min={0}
@@ -360,9 +519,21 @@ const ProductForm = ({
                                     value={form.stock}
                                     onChange={handleChange}
                                 />
+
+                                {errors.stock && (
+                                    <small className="text-danger">
+                                        {errors.stock}
+                                    </small>
+                                )}
+
                             </Form.Group>
+
                         </Col>
+
                     </Row>
+
+                    {/* Featured */}
+
                     <Row className="mb-4">
 
                         <Col md={6}>
@@ -390,177 +561,261 @@ const ProductForm = ({
                         </Col>
 
                     </Row>
-                    <Form.Group className="mb-4">
-                        {
-                            existingImages.length > 0 && (
-                                <>
-                                    <h5 className="mb-3">
-                                        Existing Images
-                                    </h5>
-                                    <Row className="mb-4">
-                                        {
-                                            existingImages.map((image, index) => (
-                                                <Col
-                                                    md={3}
-                                                    key={index}
-                                                    className="mb-3"
-                                                >
-                                                    <Card>
-                                                        <Image
-                                                            src={image}
-                                                            fluid
-                                                            style={{
-                                                                height: 180,
-                                                                objectFit: "cover",
-                                                            }}
-                                                        />
-                                                        <Card.Body
-                                                            className="text-center"
-                                                        >
-                                                            <Button
-                                                                size="sm"
-                                                                variant="outline-danger"
-                                                                onClick={() =>
-                                                                    removeExistingImage(index)
-                                                                }
-                                                            >
-                                                                Remove
 
-                                                            </Button>
-                                                        </Card.Body>
-                                                    </Card>
-                                                </Col>
-                                            ))
-                                        }
-                                    </Row>
-                                </>
-                            )
-                        }
-                        <Form.Label>Product Images</Form.Label>
+                    {/* Existing Images */}
+
+                    {existingImages.length > 0 && (
+                        <>
+                            <h5 className="mb-3">
+                                Existing Images
+                            </h5>
+
+                            <Row className="mb-4">
+
+                                {existingImages.map((image, index) => (
+
+                                    <Col
+                                        md={3}
+                                        key={index}
+                                        className="mb-3"
+                                    >
+
+                                        <Card>
+
+                                            <Image
+                                                src={image.url || image}
+                                                fluid
+                                                style={{
+                                                    height: 180,
+                                                    objectFit: "cover",
+                                                }}
+                                            />
+
+                                            <Card.Body className="text-center">
+
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline-danger"
+                                                    onClick={() =>
+                                                        removeExistingImage(index)
+                                                    }
+                                                >
+                                                    Remove
+                                                </Button>
+
+                                            </Card.Body>
+
+                                        </Card>
+
+                                    </Col>
+
+                                ))}
+
+                            </Row>
+                        </>
+                    )}
+
+                    {/* Upload Images */}
+
+                    <Form.Group className="mb-4">
+
+                        <Form.Label>
+                            Product Images
+                        </Form.Label>
+
                         <Form.Control
                             type="file"
                             multiple
                             accept="image/*"
                             onChange={handleImageChange}
                         />
+
+                        {errors.images && (
+                            <small className="text-danger">
+                                {errors.images}
+                            </small>
+                        )}
+
                     </Form.Group>
-                    {
-                        previewImages.length > 0 && (
-                            <>
-                                <h5 className="mb-3">
-                                    New Images
-                                </h5>
-                                <Row className="mb-4">
-                                    {
-                                        previewImages.map((image, index) => (
-                                            <Col
-                                                md={3}
-                                                key={index}
-                                                className="mb-3"
-                                            >
-                                                <Card>
-                                                    <Image
-                                                        src={image}
-                                                        fluid
-                                                        style={{
-                                                            height: 180,
-                                                            objectFit: "cover",
-                                                        }}
-                                                    />
-                                                    <Card.Body
-                                                        className="text-center"
-                                                    >
-                                                        <Button
-                                                            size="sm"
-                                                            variant="danger"
-                                                            onClick={() =>
-                                                                removeImage(index)
-                                                            }
-                                                        >
-                                                            Remove
-                                                        </Button>
-                                                    </Card.Body>
-                                                </Card>
-                                            </Col>
-                                        ))
-                                    }
-                                </Row>
-                            </>
-                        )
-                    }
+
+                    {/* New Images */}
+
+                    {previewImages.length > 0 && (
+                        <>
+                            <h5 className="mb-3">
+                                New Images
+                            </h5>
+
+                            <Row className="mb-4">
+
+                                {previewImages.map((image, index) => (
+
+                                    <Col
+                                        md={3}
+                                        key={index}
+                                        className="mb-3"
+                                    >
+
+                                        <Card>
+
+                                            <Image
+                                                src={image}
+                                                fluid
+                                                style={{
+                                                    height: 180,
+                                                    objectFit: "cover",
+                                                }}
+                                            />
+
+                                            <Card.Body className="text-center">
+
+                                                <Button
+                                                    size="sm"
+                                                    variant="danger"
+                                                    onClick={() =>
+                                                        removeImage(index)
+                                                    }
+                                                >
+                                                    Remove
+                                                </Button>
+
+                                            </Card.Body>
+
+                                        </Card>
+
+                                    </Col>
+
+                                ))}
+
+                            </Row>
+                        </>
+                    )}
+
+                    {/* Prices */}
+
                     <Row>
+
                         <Col md={6}>
+
                             <Form.Group className="mb-3">
-                                <Form.Label>Original Price</Form.Label>
+
+                                <Form.Label>
+                                    Original Price
+                                </Form.Label>
+
                                 <Form.Control
                                     type="number"
                                     min={0}
                                     name="originalPrice"
                                     value={form.originalPrice}
                                     onChange={handleChange}
-                                    required
                                 />
-                                {
-                                    errors.originalPrice && (
 
-                                        <small className="text-danger">
+                                {errors.originalPrice && (
+                                    <small className="text-danger">
+                                        {errors.originalPrice}
+                                    </small>
+                                )}
 
-                                            {errors.originalPrice}
-
-                                        </small>
-
-                                    )
-                                }
                             </Form.Group>
+
                         </Col>
 
                         <Col md={6}>
+
                             <Form.Group className="mb-3">
-                                <Form.Label>Discounted Price</Form.Label>
+
+                                <Form.Label>
+                                    Discounted Price
+                                </Form.Label>
+
                                 <Form.Control
                                     type="number"
                                     min={0}
+                                    max={form.originalPrice || undefined}
                                     name="discountedPrice"
                                     value={form.discountedPrice}
                                     onChange={handleChange}
-                                    required
                                 />
+
+                                {/* Live Validation */}
+
+                                {Number(form.discountedPrice) >
+                                    Number(form.originalPrice) &&
+                                    form.originalPrice !== "" && (
+                                        <small className="text-danger">
+                                            Discounted price must be less than or equal to the original price.
+                                        </small>
+                                    )}
+
+                                {/* Submit Validation */}
+
+                                {errors.discountedPrice && (
+                                    <small className="text-danger d-block">
+                                        {errors.discountedPrice}
+                                    </small>
+                                )}
+
                             </Form.Group>
+
                         </Col>
+
                     </Row>
+
+                    {/* Product Status */}
+
                     <Form.Group className="mb-4">
+
                         <Form.Label>
                             Product Status
                         </Form.Label>
+
                         <Form.Select
                             name="status"
                             value={form.status}
                             onChange={handleChange}
                         >
+
                             <option value="ACTIVE">
                                 Active
                             </option>
+
                             <option value="INACTIVE">
                                 Inactive
                             </option>
+
                         </Form.Select>
+
                     </Form.Group>
-                    <Button
-                        type="submit"
-                        disabled={loading}
-                    >
-                        {
-                            loading
+
+                    {/* Submit Button */}
+
+                    <div className="d-grid">
+
+                        <Button
+                            type="submit"
+                            disabled={loading}
+                            size="lg"
+                        >
+
+                            {loading
                                 ? "Saving..."
                                 : initialData
                                     ? "Update Product"
-                                    : "Create Product"
-                        }
-                    </Button>
+                                    : "Create Product"}
+
+                        </Button>
+
+                    </div>
+
                 </Form>
+
             </Card.Body>
+
         </Card>
+
     );
+
 };
 
 export default ProductForm;
