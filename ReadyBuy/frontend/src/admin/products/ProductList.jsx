@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 
 import { toast } from "react-toastify";
 
@@ -21,78 +25,84 @@ import {
     deleteProduct,
 } from "../services/product.admin.service";
 
+import EmptyState from "../components/EmptyState";
+import PaginationControls from "../components/PaginationControls";
+
 const ProductList = () => {
 
-    const queryClient =
-        useQueryClient();
+    const queryClient = useQueryClient();
 
-    const [showModal, setShowModal] =
-        useState(false);
+    const [showModal, setShowModal] = useState(false);
 
-    const [
-        selectedProduct,
-        setSelectedProduct,
-    ] = useState(null);
+    const [selectedProduct, setSelectedProduct] =
+        useState(null);
 
-    const [
-        deleteProductData,
-        setDeleteProductData,
-    ] = useState(null);
+    const [deleteProductData, setDeleteProductData] =
+        useState(null);
 
-    const [search, setSearch] =
-        useState("");
+    const [search, setSearch] = useState("");
+
+    const [page, setPage] = useState(1);
+
+    useEffect(() => {
+        setPage(1);
+    }, [search]);
 
     const {
         data,
         isLoading,
+        isError,
     } = useQuery({
+        queryKey: ["products", page, search],
 
-        queryKey: ["products"],
+        queryFn: () =>
+            getProducts({
+                page,
+                search,
+            }),
 
-        queryFn: getProducts,
+        keepPreviousData: true,
+    });
+    if (isError) {
+        return (
+            <EmptyState
+                title="Failed to load products"
+                subtitle="Please try again."
+            />
+        );
+    }
+
+    const deleteMutation = useMutation({
+
+        mutationFn: (id) => deleteProduct(id),
+
+        onSuccess: () => {
+
+            toast.success(
+                "Product deleted successfully."
+            );
+
+            queryClient.invalidateQueries({
+                queryKey: ["products"],
+            });
+
+            setDeleteProductData(null);
+
+        },
+
+        onError: (error) => {
+
+            toast.error(
+
+                error.response?.data?.message ||
+
+                "Unable to delete product."
+
+            );
+
+        },
 
     });
-
-    const deleteMutation =
-        useMutation({
-
-            mutationFn: (id) =>
-                deleteProduct(id),
-
-            onSuccess: () => {
-
-                toast.success(
-                    "Product deleted successfully."
-                );
-
-                queryClient.invalidateQueries({
-
-                    queryKey: [
-                        "products",
-                    ],
-
-                });
-
-                setDeleteProductData(
-                    null
-                );
-
-            },
-
-            onError: (error) => {
-
-                toast.error(
-
-                    error.response?.data
-                        ?.message ||
-
-                    "Unable to delete product."
-
-                );
-
-            },
-
-        });
 
     if (isLoading) {
 
@@ -100,29 +110,15 @@ const ProductList = () => {
 
     }
 
-    const filteredProducts =
-        data.docs.filter(product =>
-            product.name
-                .toLowerCase()
-                .includes(
-                    search.toLowerCase()
-                )
-        );
+
 
     const columns = [
-
         "Name",
-
         "Category",
-
         "Price",
-
         "Stock",
-
         "Status",
-
         "Actions",
-
     ];
 
     return (
@@ -138,13 +134,9 @@ const ProductList = () => {
                     <Button
                         onClick={() => {
 
-                            setSelectedProduct(
-                                null
-                            );
+                            setSelectedProduct(null);
 
-                            setShowModal(
-                                true
-                            );
+                            setShowModal(true);
 
                         }}
                     >
@@ -169,121 +161,109 @@ const ProductList = () => {
 
             <div className="mt-3">
 
-                <DataTable
+                {data.docs.length === 0 ? (
 
-                    columns={columns}
+                    <EmptyState
+                        title="No Products"
+                        subtitle="Create your first product."
+                    />
 
-                    data={filteredProducts}
+                ) : (
 
-                    emptyTitle="No Products"
+                    <>
+                        <DataTable
 
-                    emptySubtitle="Create your first product."
+                            columns={columns}
 
-                    renderRow={(product) => (
+                            data={data.docs}
 
-                        <tr
-                            key={product._id}
-                        >
+                            emptyTitle="No Products"
 
-                            <td>
+                            emptySubtitle="Create your first product."
 
-                                {product.name}
+                            renderRow={(product) => (
 
-                            </td>
+                                <tr key={product._id}>
 
-                            <td>
+                                    <td>{product.name}</td>
 
-                                {product.category}
+                                    <td>{product.category}</td>
 
-                            </td>
+                                    <td>
+                                        ₹{product.price.discounted}
+                                    </td>
 
-                            <td>
+                                    <td>{product.stock}</td>
 
-                                ₹
+                                    <td>
 
-                                {
-                                    product.price
-                                        .discounted
-                                }
+                                        <StatusBadge
+                                            status={product.status}
+                                        />
 
-                            </td>
+                                    </td>
 
-                            <td>
+                                    <td>
 
-                                {product.stock}
+                                        <Stack
+                                            direction="horizontal"
+                                            gap={2}
+                                        >
 
-                            </td>
+                                            <Button
+                                                size="sm"
+                                                onClick={() => {
 
-                            <td>
+                                                    setSelectedProduct(product);
 
-                                <StatusBadge
+                                                    setShowModal(true);
 
-                                    status={
-                                        product.status
-                                    }
+                                                }}
+                                            >
+                                                Edit
+                                            </Button>
 
-                                />
+                                            <Button
+                                                variant="danger"
+                                                size="sm"
+                                                onClick={() =>
+                                                    setDeleteProductData(product)
+                                                }
+                                            >
+                                                Delete
+                                            </Button>
 
-                            </td>
+                                        </Stack>
 
-                            <td>
+                                    </td>
 
-                                <Stack
-                                    direction="horizontal"
-                                    gap={2}
-                                >
+                                </tr>
 
-                                    <Button
+                            )}
 
-                                        size="sm"
+                        />
 
-                                        onClick={() => {
+                        <PaginationControls
 
-                                            setSelectedProduct(
-                                                product
-                                            );
+                            page={data.page}
 
-                                            setShowModal(
-                                                true
-                                            );
+                            hasPrevPage={data.hasPrevPage}
 
-                                        }}
+                            hasNextPage={data.hasNextPage}
 
-                                    >
+                            onPrevious={() =>
+                                setPage((prev) => prev - 1)
+                            }
 
-                                        Edit
+                            onNext={() =>
+                                setPage((prev) => prev + 1)
+                            }
 
-                                    </Button>
+                        />
 
-                                    <Button
+                    </>
 
-                                        variant="danger"
-
-                                        size="sm"
-
-                                        onClick={() =>
-
-                                            setDeleteProductData(
-                                                product
-                                            )
-
-                                        }
-
-                                    >
-
-                                        Delete
-
-                                    </Button>
-
-                                </Stack>
-
-                            </td>
-
-                        </tr>
-
-                    )}
-
-                />
+                )}
 
             </div>
 
@@ -293,48 +273,34 @@ const ProductList = () => {
 
                 handleClose={() => {
 
-                    setShowModal(
-                        false
-                    );
+                    setShowModal(false);
 
-                    setSelectedProduct(
-                        null
-                    );
+                    setSelectedProduct(null);
 
                 }}
 
-                product={
-                    selectedProduct
-                }
+                product={selectedProduct}
 
             />
 
             <ConfirmDeleteModal
 
-                show={
-                    !!deleteProductData
-                }
+                show={!!deleteProductData}
 
                 handleClose={() =>
-                    setDeleteProductData(
-                        null
-                    )
+                    setDeleteProductData(null)
                 }
 
                 title="Delete Product"
 
                 message={`Are you sure you want to delete "${deleteProductData?.name}"?`}
 
-                loading={
-                    deleteMutation.isPending
-                }
+                loading={deleteMutation.isPending}
 
                 onConfirm={() =>
-
                     deleteMutation.mutate(
                         deleteProductData._id
                     )
-
                 }
 
             />
