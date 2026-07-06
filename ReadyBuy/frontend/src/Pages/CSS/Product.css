@@ -1,0 +1,122 @@
+.product-page {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #ffffff 0%, #fcfaf7 100%);
+}
+
+.product-loading,
+.product-not-found {
+    min-height: 75vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 5px solid rgba(184, 150, 104, 0.15);
+    border-top: 5px solid #b89668;
+    animation: spin .8s linear infinite;
+    margin-bottom: 30px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.product-loading h2 {
+    color: #2f2418;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.product-loading p {
+    color: #6b6258;
+    margin-top: 10px;
+}
+
+.product-not-found {
+    max-width: 700px;
+    margin: 80px auto;
+    background: #ffffff;
+    border-radius: 28px;
+    border: 1px solid rgba(184, 150, 104, 0.15);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+}
+
+.product-not-found h1 {
+    color: #2f2418;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.product-not-found p {
+    max-width: 500px;
+    color: #6b6258;
+    line-height: 1.8;
+    margin-bottom: 35px;
+    font-size: 1.05rem;
+}
+
+.back-home-btn {
+    width: 220px;
+    height: 56px;
+    border-radius: 40px;
+    background: linear-gradient(135deg, #b89668, #a68253);
+    color: #ffffff;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    transition: all .35s ease;
+    box-shadow: 0 16px 36px rgba(184, 150, 104, 0.28);
+}
+
+.back-home-btn:hover {
+    color: #ffffff;
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, #a68253, #8f6d44);
+}
+
+@media (max-width: 768px) {
+
+    .product-loading h2,
+    .product-not-found h1 {
+        font-size: 2.2rem;
+    }
+
+    .product-not-found {
+        margin: 50px 20px;
+        padding: 40px 25px;
+    }
+
+    .back-home-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .product-loading h2,
+    .product-not-found h1 {
+        font-size: 1.8rem;
+    }
+
+    .product-not-found p {
+        font-size: 0.95rem;
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+    }
+}
