@@ -1,0 +1,135 @@
+.popular {
+    padding: 90px 8%;
+    background: #faf9f7;
+}
+
+.popular-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 55px;
+    gap: 20px;
+}
+
+.section-tag {
+    display: inline-block;
+    padding: 7px 18px;
+    margin-bottom: 16px;
+    background: rgba(184, 150, 104, 0.12);
+    color: #b89668;
+    border-radius: 30px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.popular-header h2 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #2f2f2f;
+    margin-bottom: 10px;
+}
+
+.popular-header p {
+    color: #777;
+    font-size: 1.05rem;
+    margin: 0;
+}
+
+.view-all-btn {
+    color: #b89668;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.view-all-btn:hover {
+    color: #8b6b44;
+    transform: translateX(5px);
+}
+
+.popular-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+}
+
+.popular-skeleton {
+    height: 420px;
+    border-radius: 18px;
+    background: linear-gradient(90deg,
+            #eeeeee 25%,
+            #f7f7f7 50%,
+            #eeeeee 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+    from {
+        background-position: 200% 0;
+    }
+
+    to {
+        background-position: -200% 0;
+    }
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.empty-state h3 {
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    color: #777;
+}
+
+@media (max-width: 1200px) {
+    .popular-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .popular {
+        padding: 70px 30px;
+    }
+
+    .popular-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .popular-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .popular-header h2 {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .popular {
+        padding: 60px 20px;
+    }
+
+    .popular-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .popular-header h2 {
+        font-size: 1.9rem;
+    }
+
+    .view-all-btn {
+        margin-top: 12px;
+    }
+}
