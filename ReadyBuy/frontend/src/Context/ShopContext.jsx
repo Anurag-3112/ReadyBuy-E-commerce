@@ -1,127 +1,180 @@
-import React, { createContext, useState, useEffect } from 'react'
-import { getProducts } from '../services/product.service'
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
+
+import { AuthContext } from "./AuthContext";
+
 import {
     getCart,
     addToCart as addCartItem,
     updateCartQuantity,
-    removeFromCart as deleteCartItem
-} from '../services/cart.service'
+    removeFromCart as deleteCartItem,
+} from "../services/cart.service";
 
-export const ShopContext = createContext(null)
+export const ShopContext = createContext(null);
 
-const ShopContextProvider = (props) => {
-    const [products, setProducts] = useState([])
-    const [cartItems, setCartItems] = useState([])
+const ShopContextProvider = ({ children }) => {
+    const { isAuthenticated } = useContext(AuthContext);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const data = await getProducts()
-                setProducts(data.docs || [])
-            } catch (error) {
-                console.error('Failed to fetch products:', error)
-            }
-        }
+    const [cartItems, setCartItems] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-        fetchProducts()
-    }, [])
-
-    useEffect(() => {
-        const fetchCart = async () => {
-            const token = localStorage.getItem("accessToken");
-
-            // User not logged in
-            if (!token) {
-                setCartItems([]);
-                return;
-            }
-
-            try {
-                const data = await getCart();
-                setCartItems(data.data.cart?.items || []);
-            } catch (error) {
-                console.error("Failed to fetch cart:", error);
-
-                // Token expired or invalid
-                if (error.response?.status === 401) {
-                    localStorage.removeItem("accessToken");
-                    setCartItems([]);
-                }
-            }
-        };
-
-        fetchCart();
-    }, []);
-
+    /**
+     * Fetch Cart
+     */
     const refreshCart = async () => {
-        const token = localStorage.getItem("accessToken");
-
-        if (!token) {
+        if (!isAuthenticated) {
             setCartItems([]);
             return;
         }
 
+        setLoading(true);
+
         try {
             const data = await getCart();
+
             setCartItems(data.data.cart?.items || []);
         } catch (error) {
-            console.error("Failed to refresh cart:", error);
+            console.error(
+                error.response?.data?.message ||
+                error.message
+            );
+        } finally {
+            setLoading(false);
         }
     };
 
-    const addToCart = async (productId) => {
-        const token = localStorage.getItem("accessToken");
+    /**
+     * Load cart whenever authentication changes
+     */
+    useEffect(() => {
+        if (isAuthenticated) {
+            refreshCart();
+        } else {
+            setCartItems([]);
+        }
+    }, [isAuthenticated]);
 
-        if (!token) {
+    /**
+     * Add Product
+     */
+    const addToCart = async (
+        productId,
+        size
+    ) => {
+        if (!isAuthenticated) {
             alert("Please login first.");
             return;
         }
 
         try {
-            await addCartItem(productId);
+            await addCartItem({
+                productId,
+                size,
+                quantity: 1,
+            });
+
             await refreshCart();
         } catch (error) {
-            console.error("Failed to add item to cart:", error);
+            console.error(
+                error.response?.data?.message ||
+                error.message
+            );
         }
     };
 
-    const removeFromCart = async (productId) => {
+    /**
+     * Update Quantity
+     */
+    const updateQuantity = async (
+        productId,
+        size,
+        quantity
+    ) => {
+        if (!isAuthenticated) return;
+
+        try {
+            await updateCartQuantity(
+                productId,
+                size,
+                quantity
+            );
+
+            await refreshCart();
+        } catch (error) {
+            console.error(
+                error.response?.data?.message ||
+                error.message
+            );
+        }
+    };
+
+    /**
+     * Remove Product
+     */
+    const removeFromCart = async (
+        productId,
+        size
+    ) => {
+        if (!isAuthenticated) return;
+
         try {
             const item = cartItems.find(
                 (cartItem) =>
-                    cartItem.product?._id === productId
-            )
+                    cartItem.product?._id ===
+                    productId &&
+                    cartItem.size === size
+            );
 
-            if (!item) return
+            if (!item) return;
 
             if (item.quantity <= 1) {
-                await deleteCartItem(productId)
+                await deleteCartItem(
+                    productId,
+                    size
+                );
             } else {
                 await updateCartQuantity(
                     productId,
+                    size,
                     item.quantity - 1
-                )
+                );
             }
 
-            await refreshCart()
+            await refreshCart();
         } catch (error) {
-            console.error('Failed to remove item from cart:', error)
+            console.error(
+                error.response?.data?.message ||
+                error.message
+            );
         }
-    }
+    };
 
-    const contextValue = {
-        products,
-        cartItems,
-        addToCart,
-        removeFromCart,
-        refreshCart
-    }
+    /**
+     * Clear Cart
+     */
+    const clearCart = () => {
+        setCartItems([]);
+    };
 
     return (
-        <ShopContext.Provider value={contextValue}>
-            {props.children}
+        <ShopContext.Provider
+            value={{
+                cartItems,
+                loading,
+                addToCart,
+                removeFromCart,
+                updateQuantity,
+                refreshCart,
+                clearCart,
+            }}
+        >
+            {children}
         </ShopContext.Provider>
-    )
-}
+    );
+};
 
-export default ShopContextProvider
+export default ShopContextProvider;
