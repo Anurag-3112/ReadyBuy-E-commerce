@@ -341,3 +341,18 @@
   }
 
 }
+
+.cart-product-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-product-size {
+  color: #777;
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.cart-product-size strong {
+  color: #ff4141;
+}
