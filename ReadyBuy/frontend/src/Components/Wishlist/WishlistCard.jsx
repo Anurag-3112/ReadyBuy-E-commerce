@@ -29,11 +29,14 @@ const WishlistCard = ({
 
                         <img
                             src={
-                                product.images?.[0] ||
+                                product.images?.[0]?.url ||
                                 "/placeholder.png"
                             }
                             alt={product.name}
                             className="img-fluid rounded"
+                            onError={(e) => {
+                                e.target.src = "/placeholder.png";
+                            }}
                         />
 
                     </Col>
@@ -80,37 +83,20 @@ const WishlistCard = ({
 
                         <div className="d-grid gap-2">
 
-                            <Button>
-
+                            <Button onClick={() => onMoveToCart(product._id)}>
                                 Move To Cart
-
                             </Button>
 
                             <Button
                                 variant="outline-danger"
+                                onClick={() => onRemove(product._id)}
                             >
-
                                 Remove
-
                             </Button>
 
                         </div>
 
-                        <Button
 
-                            variant="outline-danger"
-
-                            onClick={() =>
-                                onRemove(
-                                    product._id
-                                )
-                            }
-
-                        >
-
-                            <FaTrash />
-
-                        </Button>
 
                     </Col>
 
