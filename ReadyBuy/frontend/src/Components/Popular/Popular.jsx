@@ -13,27 +13,21 @@ const Popular = () => {
         isLoading,
         error,
     } = useQuery({
-        queryKey: ["products"],
-        queryFn: getProducts,
+        queryKey: ["popular-women-products"],
+        queryFn: () =>
+            getProducts({
+                category: "women",
+                limit: 4,
+            }),
         staleTime: 1000 * 60 * 5,
     });
 
-    const products = data?.docs || [];
-
-    const popularProducts = products
-        .filter(
-            (item) =>
-                item.category === "women" &&
-                item.status === "ACTIVE"
-        )
-        .slice(0, 4);
+    const popularProducts = data?.docs || [];
 
     if (isLoading) {
         return (
             <section className="popular">
-
                 <div className="popular-header">
-
                     <div>
                         <span className="section-tag">
                             Featured Collection
@@ -44,22 +38,17 @@ const Popular = () => {
                         <p>
                             Discover our most loved styles.
                         </p>
-
                     </div>
-
                 </div>
 
                 <div className="popular-grid">
-
                     {[1, 2, 3, 4].map((item) => (
                         <div
                             key={item}
                             className="popular-skeleton"
                         />
                     ))}
-
                 </div>
-
             </section>
         );
     }
@@ -67,9 +56,7 @@ const Popular = () => {
     if (error) {
         return (
             <section className="popular">
-
                 <div className="empty-state">
-
                     <h3>
                         Failed to load products.
                     </h3>
@@ -77,9 +64,7 @@ const Popular = () => {
                     <p>
                         Please try again later.
                     </p>
-
                 </div>
-
             </section>
         );
     }
@@ -89,11 +74,8 @@ const Popular = () => {
             className="popular"
             id="collection"
         >
-
             <div className="popular-header">
-
                 <div>
-
                     <span className="section-tag">
                         Featured Collection
                     </span>
@@ -105,7 +87,6 @@ const Popular = () => {
                     <p>
                         Curated essentials chosen by our customers.
                     </p>
-
                 </div>
 
                 <Link
@@ -114,11 +95,9 @@ const Popular = () => {
                 >
                     View All →
                 </Link>
-
             </div>
 
             <div className="popular-grid">
-
                 {popularProducts.length > 0 ? (
                     popularProducts.map((item) => (
                         <Item
@@ -128,6 +107,7 @@ const Popular = () => {
                             name={item.name}
                             image={
                                 item.images?.[0]?.url ||
+                                item.images?.[0] ||
                                 "/placeholder.png"
                             }
                             new_price={
@@ -140,20 +120,16 @@ const Popular = () => {
                     ))
                 ) : (
                     <div className="empty-state">
-
                         <h3>
-                            No products found
+                            No women's products found
                         </h3>
 
                         <p>
-                            Check back soon for new arrivals.
+                            Add some active women's products from the admin dashboard.
                         </p>
-
                     </div>
                 )}
-
             </div>
-
         </section>
     );
 };
