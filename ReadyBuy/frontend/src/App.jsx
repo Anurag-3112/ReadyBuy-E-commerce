@@ -13,6 +13,7 @@ import OrderSuccess from "./Pages/OrderSuccess";
 import LoginSignUp from "./Pages/LoginSignUp";
 import MyOrders from "./Pages/MyOrders";
 import OrderDetails from "./Pages/OrderDetails";
+import Wishlist from "./Pages/Wishlist";
 
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 
@@ -23,6 +24,9 @@ import kids_banner from "./Components/assets/kids_banner.png";
 import AdminRoutes from "./admin/routes/AdminRoutes";
 import AdminProtectedRoute from "./admin/components/AdminProtectedRoute";
 
+// Optional
+import NotFound from "./Pages/NotFound";
+
 function StoreLayout() {
   return (
     <>
@@ -30,18 +34,107 @@ function StoreLayout() {
 
       <Routes>
         <Route path="/" element={<Shop />} />
-        <Route path="/men" element={<ShopCateogory banner={men_banner} category="men" />} />
-        <Route path="/women" element={<ShopCateogory banner={women_banner} category="women" />} />
-        <Route path="/kids" element={<ShopCateogory banner={kids_banner} category="kids" />} />
-        <Route path="/product/:slug" element={<Product />} />
-        <Route path="/login" element={<LoginSignUp />} />
-        <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
-        <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
-        <Route path="/order-success" element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
-        <Route path="/orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
-        <Route path="/orders/:id" element={<ProtectedRoute><OrderDetails /></ProtectedRoute>} />
-      </Routes>
 
+        <Route
+          path="/men"
+          element={
+            <ShopCateogory
+              banner={men_banner}
+              category="men"
+            />
+          }
+        />
+
+        <Route
+          path="/women"
+          element={
+            <ShopCateogory
+              banner={women_banner}
+              category="women"
+            />
+          }
+        />
+
+        <Route
+          path="/kids"
+          element={
+            <ShopCateogory
+              banner={kids_banner}
+              category="kids"
+            />
+          }
+        />
+
+        <Route
+          path="/product/:slug"
+          element={<Product />}
+        />
+
+        <Route
+          path="/login"
+          element={<LoginSignUp />}
+        />
+
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/order-success"
+          element={
+            <ProtectedRoute>
+              <OrderSuccess />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <MyOrders />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orders/:id"
+          element={
+            <ProtectedRoute>
+              <OrderDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="*"
+          element={<NotFound />}
+        />
+
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
+
+      </Routes>
       <Footer />
     </>
   );
@@ -51,8 +144,19 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/admin/*" element={<AdminProtectedRoute> <AdminRoutes /> </AdminProtectedRoute>} />
-        <Route path="/*" element={<StoreLayout />} />
+        <Route
+          path="/admin/*"
+          element={
+            <AdminProtectedRoute>
+              <AdminRoutes />
+            </AdminProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/*"
+          element={<StoreLayout />}
+        />
       </Routes>
     </BrowserRouter>
   );
