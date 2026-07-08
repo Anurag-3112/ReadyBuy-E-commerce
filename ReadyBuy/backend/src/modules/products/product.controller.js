@@ -82,4 +82,4 @@ export const deleteProduct =
             message:
                 "Product deleted successfully",
         });
-    });
+    }); 
