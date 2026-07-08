@@ -6,6 +6,7 @@ import ProductList from "../products/ProductList";
 import OrdersList from "../orders/OrdersList";
 import CategoriesList from "../categories/CategoriesList";
 import UsersList from "../users/UsersList";
+import CouponsList from "../coupons/CouponsList";
 
 const AdminRoutes = () => {
     return (
@@ -16,6 +17,7 @@ const AdminRoutes = () => {
                 <Route path="orders" element={<OrdersList />} />
                 <Route path="categories" element={<CategoriesList />} />
                 <Route path="users" element={<UsersList />} />
+                <Route path="coupons" element={<CouponsList />} />
             </Route>
         </Routes>
     );
