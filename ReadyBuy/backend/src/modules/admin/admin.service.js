@@ -107,3 +107,154 @@ export const getMonthlyRevenue =
             },
         ]);
     };
+
+export const getRecentOrdersService = async () => {
+
+    return await Order.find()
+
+        .populate("user", "name email")
+
+        .sort({
+            createdAt: -1,
+        })
+
+        .limit(5);
+
+};
+
+export const getLowStockProductsService = async () => {
+
+    return await Product.find({
+        stock: {
+            $lte: 10,
+        },
+    })
+
+        .sort({
+            stock: 1,
+        })
+
+        .limit(10);
+
+};
+
+export const getTopProductsService = async () => {
+
+    return await Order.aggregate([
+
+        {
+            $unwind: "$items",
+        },
+
+        {
+            $group: {
+
+                _id: "$items.product",
+
+                totalSold: {
+                    $sum: "$items.quantity",
+                },
+
+            },
+
+        },
+
+        {
+            $sort: {
+                totalSold: -1,
+            },
+        },
+
+        {
+            $limit: 5,
+        },
+
+        {
+            $lookup: {
+
+                from: "products",
+
+                localField: "_id",
+
+                foreignField: "_id",
+
+                as: "product",
+
+            },
+
+        },
+
+        {
+            $unwind: "$product",
+        },
+
+        {
+            $project: {
+
+                _id: "$product._id",
+
+                name: "$product.name",
+
+                totalSold: 1,
+
+            },
+
+        },
+
+    ]);
+
+};
+
+export const getTopCategoriesService = async () => {
+
+    return await Order.aggregate([
+
+        {
+            $unwind: "$items",
+        },
+
+        {
+            $lookup: {
+
+                from: "products",
+
+                localField: "items.product",
+
+                foreignField: "_id",
+
+                as: "product",
+
+            },
+
+        },
+
+        {
+            $unwind: "$product",
+        },
+
+        {
+            $group: {
+
+                _id: "$product.category",
+
+                totalOrders: {
+                    $sum: "$items.quantity",
+                },
+
+            },
+
+        },
+
+        {
+            $sort: {
+                totalOrders: -1,
+            },
+        },
+
+        {
+            $limit: 5,
+        },
+
+    ]);
+
+};
