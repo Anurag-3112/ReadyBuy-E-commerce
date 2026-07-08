@@ -10,13 +10,37 @@ import "./CSS/ShopCateogory.css";
 import { ShopContext } from "../Context/ShopContext";
 import Item from "../Components/Item/Item";
 
+import { getProducts } from "../services/product.service";
+
 const ShopCateogory = ({ banner, category }) => {
 
-  const { products = [] } = useContext(ShopContext);
-
   const [sortBy, setSortBy] = useState("default");
-
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState({});
+
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+
+        const data = await getProducts({
+          category,
+          limit: 100,
+        });
+
+        setProducts(data.docs || []);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [category]);
+
 
   useEffect(() => {
     window.scrollTo({
@@ -54,40 +78,43 @@ const ShopCateogory = ({ banner, category }) => {
   };
 
   const filteredProducts = useMemo(() => {
-
-    const list = products.filter(
-      (item) => item.category === category
-    );
+    const list = [...products];
 
     switch (sortBy) {
-
       case "price-low":
-        return [...list].sort(
+        return list.sort(
           (a, b) =>
             (a.price?.discounted || 0) -
             (b.price?.discounted || 0)
         );
 
       case "price-high":
-        return [...list].sort(
+        return list.sort(
           (a, b) =>
             (b.price?.discounted || 0) -
             (a.price?.discounted || 0)
         );
 
       case "name":
-        return [...list].sort((a, b) =>
+        return list.sort((a, b) =>
           a.name.localeCompare(b.name)
         );
 
       case "newest":
-        return [...list].reverse();
+        return list.reverse();
 
       default:
         return list;
     }
+  }, [products, sortBy]);
 
-  }, [products, category, sortBy]);
+  if (loading) {
+    return (
+      <section className="shop-category">
+        <p>Loading products...</p>
+      </section>
+    );
+  }
 
   return (
 
