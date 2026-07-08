@@ -114,12 +114,14 @@ const OrderDetails = () => {
 
                             <img
                                 src={
-                                    item.image ||
+                                    item.product?.images?.[0]?.url ||
                                     "/placeholder.png"
                                 }
-                                alt={item.name}
+                                alt={item.product?.name}
                                 className="order-product-image"
                             />
+
+                            {/* <h5>{item.product?.name}</h5> */}
 
                             <div className="order-product-details">
 
