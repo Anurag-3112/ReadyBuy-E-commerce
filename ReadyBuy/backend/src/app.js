@@ -19,6 +19,9 @@ import { swaggerSpec, } from "./config/swagger.js";
 import adminRoutes from "./modules/admin/admin.routes.js";
 import categoryRoutes from "./modules/categories/category.routes.js";
 import dashboardRoutes from "./modules/dashboard/dashboard.routes.js";
+import couponRoutes from "./modules/coupons/coupon.routes.js";
+import reviewRoutes from "./modules/reviews/review.routes.js";
+import wishlistRoutes from "./modules/wishlist/wishlist.routes.js";
 
 const app = express();
 app.use(helmet());
@@ -47,6 +50,9 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/admin/dashboard", dashboardRoutes);
+app.use("/api/v1/coupons", couponRoutes);
+app.use("/api/v1/reviews", reviewRoutes);
+app.use("/api/v1/wishlist", wishlistRoutes);
 
 // 404 handler
 app.use(notFound);
