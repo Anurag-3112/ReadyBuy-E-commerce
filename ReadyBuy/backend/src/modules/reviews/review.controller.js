@@ -21,7 +21,7 @@ export const createReviewController = asyncHandler(
 
         const review =
             await createReviewService(
-                req.user._id,
+                req.user.userId,
                 req.body
             );
 
@@ -68,7 +68,7 @@ export const getMyReviewsController =
 
         const reviews =
             await getReviewsByUserService(
-                req.user._id
+                req.user.userId
             );
 
         return res.json({
@@ -115,7 +115,7 @@ export const updateReviewController =
 
                 req.params.id,
 
-                req.user._id,
+                req.user.userId,
 
                 req.body
 
@@ -142,7 +142,7 @@ export const deleteReviewController =
 
             req.params.id,
 
-            req.user._id,
+            req.user.userId,
 
             req.user.role === "ADMIN"
 
