@@ -2,8 +2,11 @@ import React from "react";
 import "./Item.css";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
+import WishlistButton
+  from "../Wishlist/WishlistButton";
 
 const Item = ({
+  _id,
   slug,
   image,
   name,
@@ -22,7 +25,24 @@ const Item = ({
 
   return (
     <div className="item">
+      <div
+        className="position-absolute"
+        style={{
+          top: 10,
+          right: 10,
+          zIndex: 10,
+        }}
+      >
 
+        <WishlistButton
+
+          productId={_id}
+
+          isWishlisted={false}
+
+        />
+
+      </div>
       <Link
         to={`/product/${slug}`}
         className="item-image"
