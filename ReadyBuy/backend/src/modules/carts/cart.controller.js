@@ -13,15 +13,16 @@ export const addToCart =
 
             const {
                 productId,
+                size,
                 quantity,
             } = req.body;
 
-            const cart =
-                await addToCartService(
-                    req.user.userId,
-                    productId,
-                    quantity
-                );
+            const cart = await addToCartService(
+                req.user.userId,
+                productId,
+                size,
+                quantity
+            );
 
             return res.status(200).json({
                 success: true,
@@ -53,6 +54,7 @@ export const updateCartItem =
 
         const {
             productId,
+            size,
             quantity,
         } = req.body;
 
@@ -60,6 +62,7 @@ export const updateCartItem =
             await updateCartItemService(
                 req.user.userId,
                 productId,
+                size,
                 quantity
             );
 
@@ -75,11 +78,13 @@ export const updateCartItem =
 export const removeFromCart =
     asyncHandler(async (req, res) => {
 
-        const cart =
-            await removeFromCartService(
-                req.user.userId,
-                req.params.productId
-            );
+        const { productId, size } = req.body;
+
+        const cart = await removeFromCartService(
+            req.user.userId,
+            productId,
+            size
+        );
 
         return res.status(200).json({
             success: true,
