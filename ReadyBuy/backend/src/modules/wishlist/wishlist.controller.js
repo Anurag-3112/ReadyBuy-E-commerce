@@ -19,7 +19,7 @@ export const addWishlistController =
         const wishlist =
             await addWishlistService(
 
-                req.user._id,
+                req.user.userId,
 
                 req.body.product
 
@@ -49,7 +49,7 @@ export const getWishlistController =
 
         const wishlist =
             await getWishlistService(
-                req.user._id
+                req.user.userId
             );
 
         return res.json({
@@ -76,7 +76,7 @@ export const removeWishlistController =
 
         await removeWishlistService(
 
-            req.user._id,
+            req.user.userId,
 
             req.params.productId
 
@@ -105,7 +105,7 @@ export const toggleWishlistController =
         const result =
             await toggleWishlistService(
 
-                req.user._id,
+                req.user.userId,
 
                 req.params.productId
 
