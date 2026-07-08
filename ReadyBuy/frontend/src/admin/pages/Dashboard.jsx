@@ -23,6 +23,11 @@ import {
     getMonthlyRevenue,
 } from "../services/admin.service";
 
+import TopProducts from "./TopProducts";
+import TopCategories from "./TopCategories";
+import RecentOrders from "./RecentOrders";
+import LowStockProducts from "./LowStockProducts";
+
 const Dashboard = () => {
 
     const {
@@ -176,7 +181,30 @@ const Dashboard = () => {
                 </Col>
 
             </Row>
+            <Row className="mt-4 g-4">
+                <Col lg={6}>
+                    <TopProducts />
+                </Col>
 
+                <Col lg={6}>
+                    <TopCategories />
+                </Col>
+            </Row>
+            <Row className="mt-4 g-4">
+
+                <Col lg={6}>
+
+                    <LowStockProducts />
+
+                </Col>
+
+                <Col lg={6}>
+
+                    <RecentOrders />
+
+                </Col>
+
+            </Row>
             <Card className="mt-5 shadow-sm">
 
                 <Card.Body>
