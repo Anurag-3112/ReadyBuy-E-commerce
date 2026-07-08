@@ -87,7 +87,7 @@ const CartItems = () => {
 
                 return (
 
-                    <div key={product._id}>
+                    <div key={`${product._id}-${item.size}`}>
 
                         <div className="cartitems-format cartitems-format-main">
 
@@ -100,9 +100,17 @@ const CartItems = () => {
                                 className="carticon-product-icon"
                             />
 
-                            <p className="cart-product-title">
-                                {product.name}
-                            </p>
+                            <div className="cart-product-info">
+
+                                <p className="cart-product-title">
+                                    {product.name}
+                                </p>
+
+                                <small className="cart-product-size">
+                                    Size: <strong>{item.size}</strong>
+                                </small>
+
+                            </div>
 
                             <p>
                                 ₹{product.price?.discounted || 0}
@@ -113,7 +121,10 @@ const CartItems = () => {
                                 <button
                                     className="cartitems-qty-btn"
                                     onClick={() =>
-                                        removeFromCart(product._id)
+                                        removeFromCart(
+                                            product._id,
+                                            item.size
+                                        )
                                     }
                                 >
                                     −
@@ -126,7 +137,10 @@ const CartItems = () => {
                                 <button
                                     className="cartitems-qty-btn"
                                     onClick={() =>
-                                        addToCart(product._id)
+                                        addToCart(
+                                            product._id,
+                                            item.size
+                                        )
                                     }
                                 >
                                     +
@@ -143,7 +157,10 @@ const CartItems = () => {
                             <button
                                 className="cartitems-remove-btn"
                                 onClick={() =>
-                                    removeFromCart(product._id)
+                                    removeFromCart(
+                                        product._id,
+                                        item.size
+                                    )
                                 }
                             >
                                 Remove
