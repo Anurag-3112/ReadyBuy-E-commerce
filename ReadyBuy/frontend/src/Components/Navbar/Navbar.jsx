@@ -27,6 +27,13 @@ import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import { ShopContext } from "../../Context/ShopContext";
 
+import { useQuery } from "@tanstack/react-query";
+
+import {
+    getWishlist,
+} from "../../services/wishlist.service";
+import { FaHeart } from "react-icons/fa";
+
 const AppNavbar = () => {
     const {
         user,
@@ -41,6 +48,15 @@ const AppNavbar = () => {
         0
     );
 
+    const {
+        data: wishlist = [],
+    } = useQuery({
+        queryKey: ["wishlist"],
+        queryFn: getWishlist,
+        enabled: isAuthenticated,
+    });
+
+    const wishlistCount = wishlist.length;
     return (
         <Navbar
             expand="lg"
@@ -129,6 +145,24 @@ const AppNavbar = () => {
                             />
 
                         </InputGroup>
+
+                        <Link
+                            to="/wishlist"
+                            className="nav-link position-relative d-flex align-items-center"
+                        >
+                            <FaHeart className="me-1" />
+                            <span>Wishlist</span>
+
+                            {wishlistCount > 0 && (
+                                <Badge
+                                    pill
+                                    bg="danger"
+                                    className="position-absolute top-0 start-100 translate-middle"
+                                >
+                                    {wishlistCount}
+                                </Badge>
+                            )}
+                        </Link>
 
                         {/* User */}
 
