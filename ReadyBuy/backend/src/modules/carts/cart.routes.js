@@ -10,7 +10,7 @@ const router =
     express.Router();
 
 router.post(
-    "/add",
+    "/",
     authenticate,
     addToCart
 );
@@ -27,10 +27,6 @@ router.patch(
     updateCartItem
 );
 
-router.delete(
-    "/remove/:productId",
-    authenticate,
-    removeFromCart
-);
+router.delete("/remove", authenticate, removeFromCart);
 
 export default router;
