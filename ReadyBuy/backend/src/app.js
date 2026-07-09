@@ -54,6 +54,16 @@ app.use("/api/v1/coupons", couponRoutes);
 app.use("/api/v1/reviews", reviewRoutes);
 app.use("/api/v1/wishlist", wishlistRoutes);
 
+
+app.get("/", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "E-commerce API is running",
+        docs: "/docs",
+        health: "/api/v1/health",
+    });
+});
+
 // 404 handler
 app.use(notFound);
 
