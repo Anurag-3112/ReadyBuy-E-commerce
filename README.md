@@ -22,15 +22,7 @@
 
 ---
 
-[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
-[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?logo=node.js)](https://nodejs.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?logo=mongodb)](https://mongodb.com/)
-[![Redis](https://img.shields.io/badge/Redis-Caching-red?logo=redis)](https://redis.io/)
-[![RabbitMQ](https://img.shields.io/badge/RabbitMQ-Queue-FF6600?logo=rabbitmq)](https://rabbitmq.com/)
-[![JWT](https://img.shields.io/badge/Auth-JWT-success)]()
-[![Cloudinary](https://img.shields.io/badge/Image-Cloudinary-3448C5)]()
-[![React Query](https://img.shields.io/badge/React_Query-TanStack-red)]()
-[![Bootstrap](https://img.shields.io/badge/UI-Bootstrap-7952B3?logo=bootstrap)]()
+![Tech Stack](./screenshots/images/teckstack.png)
 
 </div>
 
