@@ -22,7 +22,7 @@
 
 ---
 
-![Tech Stack](./screenshots/images/teckstack.png)
+![Tech Stack](./screenshots/images/techstack.png)
 
 </div>
 
