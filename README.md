@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![ReadyBuy Banner](./docs/images/banner.png)
+![ReadyBuy Banner](./screenshots/banner.png)
 
 ### 🚀 A Production-Ready Enterprise MERN E-Commerce Platform
 
