@@ -1,10 +1,10 @@
-# 🛒 ReadyBuy - Enterprise MERN E-Commerce Platform
+# ReadyBuy - Enterprise MERN E-Commerce Platform
 
 <div align="center">
 
 ![ReadyBuy Banner](./screenshots/banner.png)
 
-### 🚀 A Production-Ready Enterprise MERN E-Commerce Platform
+### A Production-Ready Enterprise MERN E-Commerce Platform
 
 *Designed with Scalability, Performance, Security, and Modern System Design Principles.*
 
@@ -28,9 +28,8 @@
 
 | Platform | Link |
 |----------|------|
-| 🌍 Frontend | https://your-frontend.vercel.app |
-| ⚙ Backend API | https://your-backend.onrender.com |
-| 👨‍💼 Admin Panel | https://your-frontend.vercel.app/admin |
+| 🌍 Frontend | https://readybuy-six.vercel.app |
+| ⚙ Backend API | https://readybuy.onrender.com |
 | 📖 API Documentation | Coming Soon |
 | 🎥 Demo Video | Coming Soon |
 
@@ -40,59 +39,54 @@
 
 ## 🏠 Home Page
 
-![Home](./docs/images/home.png)
+![Home](./screenshots/images/home.png)
 
 ---
 
 ## 🛍 Product Listing
 
-![Products](./docs/images/products.png)
+![Products](./screenshots/images/products.png)
 
 ---
 
 ## 📦 Product Details
 
-![Product Details](./docs/images/product-details.png)
+![Product Details](./screenshots/images/product-details.png)
 
 ---
 
 ## 🛒 Shopping Cart
 
-![Cart](./docs/images/cart.png)
+![Cart](./screenshots/images/cart.png)
 
 ---
 
 ## 💳 Checkout
 
-![Checkout](./docs/images/checkout.png)
+![Checkout](./screenshots/images/checkout.png)
 
 ---
 
 ## 📑 Order History
 
-![Orders](./docs/images/orders.png)
+![Orders](./screenshots/images/orders.png)
 
 ---
 
 ## 👨‍💼 Admin Dashboard
 
-![Dashboard](./docs/images/dashboard.png)
+![Dashboard](./screenshots/images/dashboard.png)
 
 ---
 
 ## 📦 Product Management
 
-![Admin Products](./docs/images/admin-products.png)
+![Admin Products](./screenshots/images/admin-products.png)
 
 ---
 
-## 🎟 Coupon Management
 
-![Coupons](./docs/images/coupons.png)
-
----
-
-# 📖 About The Project
+# About The Project
 
 ReadyBuy is a **production-ready enterprise-level E-Commerce platform** built using the **MERN Stack** while following modern software engineering principles and scalable system design.
 
@@ -115,7 +109,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-# 🎯 Project Goals
+# Project Goals
 
 ✔ Build a production-ready MERN application
 
@@ -137,9 +131,9 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-# ⭐ Key Highlights
+# Key Highlights
 
-### 🔐 Enterprise Authentication
+### Enterprise Authentication
 
 - JWT Authentication
 - Refresh Token System
@@ -149,7 +143,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-### 🛍 Customer Features
+### Customer Features
 
 - Browse Products
 - Product Details
@@ -163,7 +157,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-### 👨‍💼 Admin Features
+### Admin Features
 
 - Dashboard
 - Product Management
@@ -178,7 +172,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-### ⚡ Performance Features
+### Performance Features
 
 - Redis Caching
 - Pagination
@@ -190,7 +184,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-### ☁ Cloud Features
+### Cloud Features
 
 - Cloudinary Image Storage
 - MongoDB Atlas Ready
@@ -199,9 +193,9 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-# 🚀 Major Features
+# Major Features
 
-## 👤 User Authentication
+## User Authentication
 
 - Register
 - Login
@@ -213,7 +207,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-## 🛒 Shopping Experience
+## Shopping Experience
 
 - Browse Products
 - Product Categories
@@ -224,7 +218,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-## 🛍 Cart
+## Cart
 
 - Add to Cart
 - Remove Item
@@ -234,7 +228,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-## 💳 Checkout
+## Checkout
 
 - Shipping Address
 - Order Summary
@@ -244,7 +238,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-## 📦 Orders
+## Orders
 
 - My Orders
 - Order Details
@@ -254,7 +248,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-## 🎟 Coupons
+## Coupons
 
 - Create Coupon
 - Edit Coupon
@@ -268,7 +262,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-## 📊 Analytics Dashboard
+## Analytics Dashboard
 
 - Revenue Statistics
 - Monthly Sales
@@ -280,7 +274,7 @@ The primary objective of this project is to showcase the implementation of:
 
 ---
 
-# 🧰 Tech Stack
+# Tech Stack
 
 ## Frontend
 
@@ -345,7 +339,7 @@ Collections
 
 ---
 
-# 📈 Current Project Status
+# Current Project Status
 
 | Module | Status |
 |---------|:------:|
@@ -362,7 +356,7 @@ Collections
 
 ---
 
-# 🏆 Why This Project?
+# Why This Project?
 
 Most academic MERN projects stop after implementing basic CRUD operations.
 
