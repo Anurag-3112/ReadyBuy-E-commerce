@@ -37,49 +37,55 @@
 
 # 📸 Demo
 
-## 🏠 Home Page
+## Home Page
 
 ![Home](./screenshots/images/home.png)
 
 ---
 
-## 🛍 Product Listing
+## Product Listing
 
 ![Products](./screenshots/images/products.png)
 
 ---
 
-## 📦 Product Details
+## Product Details
 
 ![Product Details](./screenshots/images/product-details.png)
 
 ---
 
-## 🛒 Shopping Cart
+## Shopping Cart
 
 ![Cart](./screenshots/images/cart.png)
 
 ---
 
-## 💳 Checkout
+## Checkout
 
 ![Checkout](./screenshots/images/checkout.png)
 
 ---
 
-## 📑 Order History
+## Order Placed
 
-![Orders](./screenshots/images/orders.png)
+![Orders](./screenshots/images/order-placed.png)
 
 ---
 
-## 👨‍💼 Admin Dashboard
+## Order History
+
+![Orders](./screenshots/images/orders.png)
+order-placed
+---
+
+## Admin Dashboard
 
 ![Dashboard](./screenshots/images/dashboard.png)
 
 ---
 
-## 📦 Product Management
+## Product Management
 
 ![Admin Products](./screenshots/images/admin-products.png)
 
