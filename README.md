@@ -24,7 +24,7 @@
 
 ---
 
-# 🌐 Live Demo
+# Live Demo
 
 | Platform | Link |
 |----------|------|
@@ -35,7 +35,7 @@
 
 ---
 
-# 📸 Demo
+# Demo
 
 ## Home Page
 
