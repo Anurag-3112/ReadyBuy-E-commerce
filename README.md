@@ -8,6 +8,18 @@
 
 *Designed with Scalability, Performance, Security, and Modern System Design Principles.*
 
+<p align="center">
+  <a href="https://readybuy-six.vercel.app">
+    <img src="https://img.shields.io/badge/🌍%20Live%20Demo-ReadyBuy-black?style=for-the-badge" alt="Live Demo">
+  </a>
+  <a href="https://readybuy.onrender.com">
+    <img src="https://img.shields.io/badge/⚙️%20Backend-API-blue?style=for-the-badge" alt="Backend API">
+  </a>
+  <a href="https://github.com/Anurag-3112/ReadyBuy-E-commerce/wiki">
+    <img src="https://img.shields.io/badge/📚%20API-Documentation-green?style=for-the-badge" alt="API Documentation">
+  </a>
+</p>
+
 ---
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
@@ -24,14 +36,30 @@
 
 ---
 
-# Live Demo
+# About The Project
 
-| Platform | Link |
-|----------|------|
-| 🌍 Frontend | https://readybuy-six.vercel.app |
-| ⚙ Backend API | https://readybuy.onrender.com |
-| 📖 API Documentation | Coming Soon |
-| 🎥 Demo Video | Coming Soon |
+ReadyBuy is a **production-ready enterprise-level E-Commerce platform** built using the **MERN Stack** while following modern software engineering principles and scalable system design.
+
+Unlike traditional CRUD-based college projects, ReadyBuy has been architected as a real-world e-commerce application inspired by platforms such as **Amazon, Flipkart, Myntra, and Shopify**.
+
+The project demonstrates not only frontend and backend development but also **distributed system concepts**, **performance optimization**, **clean architecture**, and **scalable backend design**, making it an ideal portfolio project for software engineering and full-stack development roles.
+
+The primary objective of this project is to showcase the implementation of:
+
+- Enterprise MERN Architecture
+- Authentication & Authorization
+- Scalable Backend Design
+- High Performance APIs
+- Caching Strategies
+- Asynchronous Processing
+- Secure Payment Workflow
+- Admin Management Portal
+- Analytics Dashboard
+- Production Deployment
+
+[Read more](#system-design--architecture)
+
+
 
 ---
 
@@ -92,273 +120,121 @@ order-placed
 ---
 
 
-# About The Project
-
-ReadyBuy is a **production-ready enterprise-level E-Commerce platform** built using the **MERN Stack** while following modern software engineering principles and scalable system design.
-
-Unlike traditional CRUD-based college projects, ReadyBuy has been architected as a real-world e-commerce application inspired by platforms such as **Amazon, Flipkart, Myntra, and Shopify**.
-
-The project demonstrates not only frontend and backend development but also **distributed system concepts**, **performance optimization**, **clean architecture**, and **scalable backend design**, making it an ideal portfolio project for software engineering and full-stack development roles.
-
-The primary objective of this project is to showcase the implementation of:
-
-- Enterprise MERN Architecture
-- Authentication & Authorization
-- Scalable Backend Design
-- High Performance APIs
-- Caching Strategies
-- Asynchronous Processing
-- Secure Payment Workflow
-- Admin Management Portal
-- Analytics Dashboard
-- Production Deployment
-
----
-
 # Project Goals
 
-✔ Build a production-ready MERN application
+* Build a **production-ready MERN application**
+* Design a **scalable and maintainable backend architecture**
+* Implement **enterprise-grade authentication and authorization**
+* Improve application performance using **Redis caching**
+* Enable **asynchronous processing with RabbitMQ**
+* Build a **fully functional Admin Dashboard**
+* Demonstrate **real-world System Design concepts**
+* Follow **Clean Code and SOLID principles**
+* Maintain a **recruiter-friendly, industry-standard architecture**
 
-✔ Follow scalable backend architecture
-
-✔ Implement enterprise authentication
-
-✔ Optimize performance using Redis caching
-
-✔ Use RabbitMQ for asynchronous processing
-
-✔ Build an Admin Dashboard
-
-✔ Demonstrate System Design concepts
-
-✔ Follow Clean Code principles
-
-✔ Create recruiter-friendly architecture
 
 ---
 
 # Key Highlights
 
-### Enterprise Authentication
+### Authentication & Authorization
 
-- JWT Authentication
-- Refresh Token System
-- Protected Routes
-- Role-Based Access Control (RBAC)
-- Admin & Customer Separation
+* JWT Authentication with Refresh Tokens
+* Protected Routes
+* Role-Based Access Control (RBAC)
+* Separate Admin and Customer Access
 
----
+### E-Commerce Features
 
-### Customer Features
+* Product Search, Filtering & Categories
+* Shopping Cart & Checkout
+* Coupon System
+* Order Management & Tracking
+* User Profile Management
 
-- Browse Products
-- Product Details
-- Category Filtering
-- Product Search
-- Shopping Cart
-- Checkout
-- Order History
-- Profile Management
-- Coupon Application
+### Admin Dashboard
 
----
+* Product, User, Order & Coupon Management
+* Revenue & Sales Analytics
+* Top Products & Categories
+* Low Stock Monitoring
 
-### Admin Features
+### Performance & Scalability
 
-- Dashboard
-- Product Management
-- User Management
-- Order Management
-- Category Management
-- Coupon Management
-- Revenue Analytics
-- Sales Charts
-- Recent Orders
-- Low Stock Monitoring
+* Redis Caching
+* Pagination & Optimized Database Queries
+* React Query for Efficient Data Fetching
+* RabbitMQ for Asynchronous Processing
+* Image Optimization with Cloudinary
 
----
+### Production Ready
 
-### Performance Features
-
-- Redis Caching
-- Pagination
-- Lazy Loading
-- React Query
-- Optimized Database Queries
-- Image Optimization
-- CDN Image Delivery
+* Docker & Docker Compose
+* MongoDB Atlas
+* Cloudinary
+* Production Deployment Ready
 
 ---
 
-### Cloud Features
+<h2>Tech Stack</h2>
 
-- Cloudinary Image Storage
-- MongoDB Atlas Ready
-- Docker Support
-- Production Deployment Ready
+<table>
+  <tr>
+    <th>Frontend</th>
+    <th>Backend</th>
+    <th>DevOps & Tools</th>
+  </tr>
+  <tr>
+    <td valign="top">
 
----
+  React 19  
+    React Router  
+    TanStack React Query  
+    Axios  
+    Bootstrap 5  
+    Chart.js
 
-# Major Features
+  </td>
+  <td valign="top">
 
-## User Authentication
+  Node.js  
+    Express.js  
+    MongoDB & Mongoose  
+    JWT & Bcrypt  
+    Redis & RabbitMQ  
+    Cloudinary  
+    Zod
 
-- Register
-- Login
-- JWT Access Token
-- Refresh Token
-- Logout
-- Protected Routes
-- Admin Authentication
+  </td>
+  <td valign="top">
 
----
+  Docker  
+    Docker Compose  
+    Git & GitHub  
+    Postman  
+    MongoDB Compass
 
-## Shopping Experience
+  </td>
+  </tr>
+</table>
 
-- Browse Products
-- Product Categories
-- Product Details
-- Search Products
-- Product Filters
-- Related Products
-
----
-
-## Cart
-
-- Add to Cart
-- Remove Item
-- Update Quantity
-- Persistent Cart
-- Cart Total Calculation
-
----
-
-## Checkout
-
-- Shipping Address
-- Order Summary
-- Coupon Support
-- Order Placement
-- Payment Ready Architecture
-
----
-
-## Orders
-
-- My Orders
-- Order Details
-- Order Tracking
-- Admin Order Management
-- Order Status Updates
-
----
-
-## Coupons
-
-- Create Coupon
-- Edit Coupon
-- Delete Coupon
-- Coupon Validation
-- Percentage Discount
-- Fixed Discount
-- Usage Limit
-- Expiry Date
-- Minimum Order Amount
-
----
-
-## Analytics Dashboard
-
-- Revenue Statistics
-- Monthly Sales
-- Top Products
-- Top Categories
-- Low Stock Products
-- Recent Orders
-- Business Insights
-
----
-
-# Tech Stack
-
-## Frontend
-
-- React 19
-- React Router DOM
-- React Query (TanStack Query)
-- Axios
-- Bootstrap 5
-- React Bootstrap
-- Chart.js
-- React Toastify
-
----
-
-## Backend
-
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JWT
-- Bcrypt
-- Redis
-- RabbitMQ
-- Cloudinary
-- Multer
-- Zod Validation
-
----
-
-## Database
-
-- MongoDB
-
-Collections
-
-- Users
-- Products
-- Categories
-- Orders
-- Coupons
-- Refresh Tokens
-
----
-
-## DevOps
-
-- Docker
-- Docker Compose
-- Redis
-- RabbitMQ
-
----
-
-## Development Tools
-
-- Git
-- GitHub
-- VS Code
-- Postman
-- MongoDB Compass
 
 ---
 
 # Current Project Status
 
 | Module | Status |
-|---------|:------:|
-| Authentication | ✅ Complete |
-| Customer Store | ✅ Complete |
-| Admin Dashboard | ✅ Complete |
-| Products | ✅ Complete |
-| Categories | ✅ Complete |
-| Orders | ✅ Complete |
-| Coupons | ✅ Complete |
-| Analytics | 🟡 In Progress |
-| Payment Gateway | 🟡 Ready for Integration |
-| Deployment | 🟡 Pending |
+|:---|:---:|
+| Authentication | **Complete** |
+| Customer Store | **Complete** |
+| Admin Dashboard | **Complete** |
+| Products | **Complete** |
+| Categories | **Complete** |
+| Orders | **Complete** |
+| Coupons | **Complete** |
+| Analytics | **In Progress** |
+| Payment Gateway | **Ready for Integration** |
+| Deployment | **Complete** |
 
 ---
 
@@ -406,7 +282,7 @@ ReadyBuy/
 ---
 
 
-# 🏗️ System Design & Architecture
+# System Design & Architecture
 
 One of the primary goals of **ReadyBuy** is to demonstrate **enterprise software architecture** rather than just implementing CRUD operations.
 
