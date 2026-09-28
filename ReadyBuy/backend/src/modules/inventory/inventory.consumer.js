@@ -1,13 +1,5 @@
-import {
-    getChannel,
-} from "../../config/rabbitmq.js";
-
-
-import {
-    decrementStock,
-} from "../../modules/products/product.repository.js";
-
-
+import { getChannel } from "../../config/rabbitmq.js";
+import { decrementStock } from "../../modules/products/product.repository.js";
 import {
     findInventoryEvent,
     createInventoryEvent,
@@ -15,240 +7,143 @@ import {
     markInventoryFailed,
 } from "../../modules/inventory/inventory-event.repository.js";
 
+export const startInventoryConsumer = async () => {
+    const channel = getChannel();
+    const exchange = "order.exchange";
+    const queue = "inventory.queue";
 
-export const startInventoryConsumer =
-    async () => {
+    await channel.assertExchange(
+        exchange,
+        "fanout",
+        {
+            durable: true,
+        }
+    );
 
-        const channel =
-            getChannel();
+    await channel.assertQueue(
+        queue,
+        {
+            durable: true,
+        }
+    );
 
+    await channel.bindQueue(
+        queue,
+        exchange,
+        ""
+    );
 
-        const exchange =
-            "order.exchange";
+    channel.consume(queue, async (msg) => {
+        if (!msg) {
+            return;
+        }
 
+        let order;
 
-        const queue =
-            "inventory.queue";
+        try {
+            order = JSON.parse(
+                msg.content.toString()
+            );
 
+            const orderId =
+                order.orderId ||
+                order._id;
 
-        await channel.assertExchange(
-            exchange,
-            "fanout",
-            {
-                durable: true,
+            if (!orderId) {
+                throw new Error(
+                    "Inventory event missing orderId"
+                );
             }
-        );
 
+            console.log(
+                `Processing inventory for order ${orderId}`
+            );
 
-        await channel.assertQueue(
-            queue,
-            {
-                durable: true,
+            const existingEvent =
+                await findInventoryEvent(
+                    orderId
+                );
+
+            if (
+                existingEvent?.status ===
+                "COMPLETED"
+            ) {
+                console.log(
+                    `Inventory already processed for order ${orderId}`
+                );
+
+                channel.ack(msg);
+
+                return;
             }
-        );
 
-
-        await channel.bindQueue(
-            queue,
-            exchange,
-            ""
-        );
-
-
-        channel.consume(
-            queue,
-
-            async (msg) => {
-
-                if (!msg) {
-                    return;
-                }
-
-
-                let order;
-
-
+            if (!existingEvent) {
                 try {
-
-                    order =
-                        JSON.parse(
-                            msg.content.toString()
-                        );
-
-
-                    const orderId =
-                        order.orderId ||
-                        order._id;
-
-
-                    if (!orderId) {
-
-                        throw new Error(
-                            "Inventory event missing orderId"
-                        );
-                    }
-
-
-                    console.log(
-                        `Processing inventory for order ${orderId}`
+                    await createInventoryEvent(
+                        orderId
                     );
-
-
-                    /*
-                     * ------------------------------------
-                     * Check whether this order was already
-                     * processed.
-                     * ------------------------------------
-                     */
-                    const existingEvent =
+                } catch (error) {
+                    const event =
                         await findInventoryEvent(
                             orderId
                         );
 
-
                     if (
-                        existingEvent?.status ===
+                        event?.status ===
                         "COMPLETED"
                     ) {
-
-                        console.log(
-                            `Inventory already processed for order ${orderId}`
-                        );
-
-
-                        channel.ack(
-                            msg
-                        );
+                        channel.ack(msg);
 
                         return;
                     }
+                }
+            }
 
-
-                    /*
-                     * ------------------------------------
-                     * Create processing record.
-                     * ------------------------------------
-                     */
-                    if (!existingEvent) {
-
-                        try {
-
-                            await createInventoryEvent(
-                                orderId
-                            );
-
-                        } catch (error) {
-
-                            /*
-                             * Another consumer may have
-                             * created the record first.
-                             *
-                             * Because orderId is unique,
-                             * duplicate creation is safe.
-                             */
-                            const event =
-                                await findInventoryEvent(
-                                    orderId
-                                );
-
-
-                            if (
-                                event?.status ===
-                                "COMPLETED"
-                            ) {
-
-                                channel.ack(
-                                    msg
-                                );
-
-                                return;
-                            }
-                        }
-                    }
-
-
-                    /*
-                     * ------------------------------------
-                     * Deduct stock.
-                     * ------------------------------------
-                     */
-                    for (
-                        const item of
-                        order.items
-                    ) {
-
-                        const product =
-                            await decrementStock(
-                                item.product,
-                                item.quantity
-                            );
-
-
-                        /*
-                         * IMPORTANT
-                         *
-                         * null means the atomic
-                         * stock condition failed.
-                         */
-                        if (!product) {
-
-                            throw new Error(
-                                `Insufficient stock for product ${item.product}`
-                            );
-                        }
-                    }
-
-
-                    /*
-                     * ------------------------------------
-                     * Mark event completed.
-                     * ------------------------------------
-                     */
-                    await markInventoryCompleted(
-                        orderId
+            for (const item of order.items) {
+                const product =
+                    await decrementStock(
+                        item.product,
+                        item.quantity
                     );
 
-
-                    console.log(
-                        `Inventory completed for order ${orderId}`
-                    );
-
-
-                    channel.ack(
-                        msg
-                    );
-
-                } catch (error) {
-
-                    console.error(
-                        "Inventory processing failed:",
-                        error
-                    );
-
-
-                    if (order?.orderId || order?._id) {
-
-                        const orderId =
-                            order.orderId ||
-                            order._id;
-
-
-                        await markInventoryFailed(
-                            orderId,
-                            error
-                        );
-                    }
-
-
-                    /*
-                     * Requeue for retry.
-                     */
-                    channel.nack(
-                        msg,
-                        false,
-                        true
+                if (!product) {
+                    throw new Error(
+                        `Insufficient stock for product ${item.product}`
                     );
                 }
             }
-        );
-    };
+
+            await markInventoryCompleted(
+                orderId
+            );
+
+            console.log(
+                `Inventory completed for order ${orderId}`
+            );
+
+            channel.ack(msg);
+        } catch (error) {
+            console.error(
+                "Inventory processing failed:",
+                error
+            );
+
+            if (order?.orderId || order?._id) {
+                const orderId =
+                    order.orderId ||
+                    order._id;
+
+                await markInventoryFailed(
+                    orderId,
+                    error
+                );
+            }
+
+            channel.nack(
+                msg,
+                false,
+                true
+            );
+        }
+    });
+};
