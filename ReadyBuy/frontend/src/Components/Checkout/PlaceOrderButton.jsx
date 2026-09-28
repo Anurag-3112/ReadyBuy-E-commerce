@@ -42,7 +42,11 @@ const loadRazorpayScript = () => {
     });
 };
 
-const PlaceOrderButton = ({ address, paymentMethod }) => {
+const PlaceOrderButton = ({
+    address,
+    paymentMethod,
+    couponCode,
+}) => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const checkoutInProgressRef = useRef(false);
@@ -339,14 +343,19 @@ const PlaceOrderButton = ({ address, paymentMethod }) => {
         console.log("Creating order with:", {
             shippingAddress: address,
             paymentMethod: paymentMethod,
+            couponCode: couponCode || undefined,
         });
         console.log("========== READYBUY CHECKOUT ==========");
         console.log("Payment Method:", paymentMethod);
         console.log("Address:", address);
+        console.log("Coupon Code:", couponCode || "None");
         console.log("========================================");
         mutation.mutate({
             shippingAddress: address,
             paymentMethod: paymentMethod,
+            ...(couponCode && {
+                couponCode,
+            }),
         });
     };
 
