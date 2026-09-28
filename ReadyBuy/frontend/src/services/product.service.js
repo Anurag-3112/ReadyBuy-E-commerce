@@ -7,7 +7,6 @@ export const getProducts = async ({
     category = "",
     sort = "",
 } = {}) => {
-
     const response = await api.get("/products", {
         params: {
             page,
@@ -17,13 +16,10 @@ export const getProducts = async ({
             sort,
         },
     });
-
     return response.data.data;
 };
 
 export const getProduct = async (slug) => {
-
     const response = await api.get(`/products/${slug}`);
-
     return response.data.data;
 };
