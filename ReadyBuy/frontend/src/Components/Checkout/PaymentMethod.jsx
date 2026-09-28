@@ -13,7 +13,7 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
         {
             value: "RAZORPAY",
             label: "Razorpay",
-            enabled: false,
+            enabled: true,
         },
         {
             value: "STRIPE",
@@ -37,15 +37,9 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
 
                 <div
                     key={method.value}
-                    className={`payment-option ${paymentMethod === method.value
-                            ? "active"
-                            : ""
-                        } ${!method.enabled
-                            ? "disabled"
-                            : ""
-                        }`}
+                    className={`payment-option ${paymentMethod === method.value ? "active" : ""} 
+                        ${!method.enabled ? "disabled" : ""}`}
                 >
-
                     <Form.Check
                         type="radio"
                         id={method.value}
