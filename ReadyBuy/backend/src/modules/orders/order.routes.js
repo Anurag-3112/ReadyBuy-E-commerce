@@ -1,13 +1,10 @@
 import express from "express";
-
 import authenticate from "../../shared/middleware/auth.middleware.js";
 import authorize from "../../shared/middleware/authorize.middleware.js";
-
 import {
     createOrder,
     getOrders,
     getOrderById,
-
     getAllOrders,
     getAdminOrder,
     updateOrderStatus,
@@ -17,14 +14,6 @@ import {
 } from "./order.controller.js";
 
 const router = express.Router();
-
-/*
-|--------------------------------------------------------------------------
-| Dashboard
-|--------------------------------------------------------------------------
-*/
-
-// Customer routes
 
 router.post(
     "/",
@@ -57,12 +46,6 @@ router.get(
     authorize("ADMIN"),
     getRecentOrders
 );
-
-/*
-|--------------------------------------------------------------------------
-| Orders
-|--------------------------------------------------------------------------
-*/
 
 router.get(
     "/",
