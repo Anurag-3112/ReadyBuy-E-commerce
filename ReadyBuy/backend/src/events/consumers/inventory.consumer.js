@@ -1,83 +1,61 @@
-import {
-    getChannel,
-} from "../../config/rabbitmq.js";
+import { getChannel } from "../../config/rabbitmq.js";
+import { decrementStock } from "../../modules/products/product.repository.js";
 
-import {
-    decrementStock,
-} from "../../modules/products/product.repository.js";
+export const startInventoryConsumer = async () => {
+    const channel = getChannel();
+    const exchange = "order.exchange";
+    const queue = "inventory.queue";
 
-export const startInventoryConsumer =
-    async () => {
+    await channel.assertExchange(
+        exchange,
+        "fanout",
+        {
+            durable: true,
+        }
+    );
 
-        const channel =
-            getChannel();
+    await channel.assertQueue(
+        queue,
+        {
+            durable: true,
+        }
+    );
 
-        const exchange =
-            "order.exchange";
+    await channel.bindQueue(
+        queue,
+        exchange,
+        ""
+    );
 
-        const queue =
-            "inventory.queue";
+    channel.consume(
+        queue,
+        async (msg) => {
+            try {
+                const order = JSON.parse(
+                    msg.content.toString()
+                );
 
-        await channel.assertExchange(
-            exchange,
-            "fanout",
-            {
-                durable: true,
-            }
-        );
+                console.log(
+                    `Processing order ${order._id}`
+                );
 
-        await channel.assertQueue(
-            queue,
-            {
-                durable: true,
-            }
-        );
-
-        await channel.bindQueue(
-            queue,
-            exchange,
-            ""
-        );
-
-        channel.consume(
-            queue,
-            async (msg) => {
-
-                try {
-
-                    const order =
-                        JSON.parse(
-                            msg.content.toString()
-                        );
-
-                    console.log(
-                        `Processing order ${order._id}`
-                    );
-
-                    for (
-                        const item of order.items
-                    ) {
-
-                        await decrementStock(
-                            item.product,
-                            item.quantity
-                        );
-                    }
-
-                    channel.ack(msg);
-
-                } catch (error) {
-
-                    console.error(
-                        error
-                    );
-
-                    channel.nack(
-                        msg,
-                        false,
-                        true
+                for (const item of order.items) {
+                    await decrementStock(
+                        item.product,
+                        item.quantity
                     );
                 }
+
+                channel.ack(msg);
+            } catch (error) {
+                console.error(error);
+
+                channel.nack(
+                    msg,
+                    false,
+                    true
+                );
             }
-        );
-    };  
+        }
+    );
+};
