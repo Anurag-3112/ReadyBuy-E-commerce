@@ -7,19 +7,14 @@ const CategoryFilters = ({
 }) => {
 
     return (
-
         <FilterBar>
-
             <SearchInput
                 value={search}
                 onChange={setSearch}
                 placeholder="Search Categories..."
             />
-
         </FilterBar>
-
     );
-
 };
 
 export default CategoryFilters;
