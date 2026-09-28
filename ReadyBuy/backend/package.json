@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
+    "test": "cross-env NODE_ENV=test jest --runInBand",
+    "test:watch": "cross-env NODE_ENV=test jest --watch",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage",
     "lint": "eslint .",
     "seed": "node src/seeds/products.seed.js"
   },
@@ -33,6 +36,7 @@
     "mongoose-paginate-v2": "^1.9.5",
     "morgan": "^1.11.0",
     "multer": "^2.2.0",
+    "razorpay": "^2.9.8",
     "react-chartjs-2": "^5.3.1",
     "redis": "^6.0.0",
     "slugify": "^1.6.9",
@@ -44,8 +48,13 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@jest/globals": "^30.4.1",
+    "cross-env": "^10.1.0",
     "eslint": "^10.5.0",
+    "jest": "^30.4.2",
+    "mongodb-memory-server": "^11.2.0",
     "nodemon": "^3.1.14",
-    "prettier": "^3.8.4"
+    "prettier": "^3.8.4",
+    "supertest": "^7.2.2"
   }
 }
