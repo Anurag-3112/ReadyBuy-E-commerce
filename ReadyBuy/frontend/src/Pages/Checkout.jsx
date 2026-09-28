@@ -10,7 +10,7 @@ import { ShopContext } from "../Context/ShopContext";
 import {
     applyCoupon,
     getAvailableCoupons,
-} from "../services/coupon.admin.service";
+} from "../admin/services/coupon.admin.service";
 import { toast } from "react-toastify";
 import "./CSS/Checkout.css";
 
