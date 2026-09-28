@@ -36,82 +36,57 @@ const OrderDetails = () => {
 
     return (
         <section className="order-details-page">
-
             <div className="order-header">
-
                 <div className="order-header-top">
-
                     <span className="order-tag">
                         Order Summary
                     </span>
-
                     <Link
                         to="/orders"
                         className="back-orders-btn"
                     >
                         Back to Orders
                     </Link>
-
                 </div>
-
                 <h1>
                     Order #{data._id?.slice(-8)}
                 </h1>
-
                 <p>
                     Thank you for shopping with ReadyBuy.
                     Your order has been placed successfully.
                 </p>
-
             </div>
-
             <div className="order-details-card">
-
                 <div className="order-info">
-
                     <div className="info-row">
                         <span>Order Status</span>
-
                         <span className="status-badge">
                             {data.status}
                         </span>
                     </div>
-
                     <div className="info-row">
                         <span>Payment Method</span>
-
                         <span>
                             {data.paymentMethod || "Cash on Delivery"}
                         </span>
                     </div>
-
                     <div className="info-row">
                         <span>Total Items</span>
-
                         <span>
                             {data.items?.length || 0}
                         </span>
                     </div>
-
                 </div>
-
                 <div className="products-heading">
-
                     <HiOutlineShoppingBag />
-
                     <h3>Products</h3>
-
                 </div>
-
                 <div className="order-products">
-
                     {data.items?.map((item, index) => (
-
                         <div
                             className="order-product"
                             key={item.product || index}
                         >
-
                             <img
                                 src={
                                     item.product?.images?.[0]?.url ||
@@ -120,62 +95,34 @@ const OrderDetails = () => {
                                 alt={item.product?.name}
                                 className="order-product-image"
                             />
-
-                            {/* <h5>{item.product?.name}</h5> */}
-
                             <div className="order-product-details">
-
-                                <h5>
-                                    {item.name}
-                                </h5>
-
+                                <h5>{item.name}</h5>
                                 <p>
                                     Quantity: {item.quantity}
                                 </p>
-
                                 <small>
                                     ₹{item.price} × {item.quantity}
                                 </small>
-
                             </div>
-
                             <strong>
                                 ₹{item.price * item.quantity}
                             </strong>
-
                         </div>
-
                     ))}
-
                 </div>
-
                 <div className="order-total">
-
-                    <span>
-                        Grand Total
-                    </span>
-
-                    <h2>
-                        ₹{data.totalAmount}
-                    </h2>
-
+                    <span>Grand Total</span>
+                    <h2>₹{data.totalAmount}</h2>
                 </div>
-
                 <div className="order-actions">
-
-
-
                     <Link
                         to="/"
                         className="continue-shopping-btn"
                     >
                         Continue Shopping
                     </Link>
-
                 </div>
-
             </div>
-
         </section>
     );
 };
