@@ -5,18 +5,12 @@ export const addToCart = async ({
     size,
     quantity = 1,
 }) => {
-
-    const res = await api.post(
-        "/cart",
-        {
-            productId,
-            size,
-            quantity,
-        }
-    );
-
+    const res = await api.post("/cart", {
+        productId,
+        size,
+        quantity,
+    });
     return res.data;
-
 };
 
 export const getCart = async () => {
@@ -29,35 +23,23 @@ export const updateCartQuantity = async (
     size,
     quantity
 ) => {
-
-    const res = await api.patch(
-        "/cart/update",
-        {
-            productId,
-            size,
-            quantity,
-        }
-    );
-
+    const res = await api.patch("/cart/update", {
+        productId,
+        size,
+        quantity,
+    });
     return res.data;
-
 };
 
 export const removeFromCart = async (
     productId,
     size
 ) => {
-
-    const res = await api.delete(
-        "/cart/remove",
-        {
-            data: {
-                productId,
-                size,
-            },
-        }
-    );
-
+    const res = await api.delete("/cart/remove", {
+        data: {
+            productId,
+            size,
+        },
+    });
     return res.data;
-
 };
