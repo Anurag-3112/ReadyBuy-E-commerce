@@ -152,7 +152,6 @@ function App() {
             </AdminProtectedRoute>
           }
         />
-
         <Route
           path="/*"
           element={<StoreLayout />}
