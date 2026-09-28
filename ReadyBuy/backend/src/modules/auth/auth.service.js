@@ -1,25 +1,17 @@
 import bcrypt from "bcrypt";
 import AppError from "../../shared/errors/AppError.js";
-
 import {
     createUser,
     findUserByEmail,
 } from "../users/user.repository.js";
-
 import {
     generateAccessToken,
     generateRefreshToken,
 } from "../../shared/utils/jwt.js";
-
 import { toUserResponse } from "../users/user.mapper.js";
 
-export const registerUser = async (
-    userData
-) => {
-    const existingUser =
-        await findUserByEmail(
-            userData.email
-        );
+export const registerUser = async (userData) => {
+    const existingUser = await findUserByEmail(userData.email);
 
     if (existingUser) {
         throw new AppError(
@@ -28,31 +20,25 @@ export const registerUser = async (
         );
     }
 
-    const hashedPassword =
-        await bcrypt.hash(
-            userData.password,
-            10
-        );
+    const hashedPassword = await bcrypt.hash(
+        userData.password,
+        10
+    );
 
-    const user =
-        await createUser({
-            ...userData,
-            password: hashedPassword,
-        });
+    const user = await createUser({
+        ...userData,
+        password: hashedPassword,
+    });
 
     const payload = {
         userId: user._id,
         role: user.role,
     };
 
-    const accessToken =
-        generateAccessToken(payload);
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
 
-    const refreshToken =
-        generateRefreshToken(payload);
-
-    user.refreshToken =
-        refreshToken;
+    user.refreshToken = refreshToken;
 
     await user.save();
 
@@ -63,12 +49,8 @@ export const registerUser = async (
     };
 };
 
-export const loginUser = async (
-    email,
-    password
-) => {
-    const user =
-        await findUserByEmail(email);
+export const loginUser = async (email, password) => {
+    const user = await findUserByEmail(email);
 
     if (!user) {
         throw new AppError(
@@ -77,11 +59,10 @@ export const loginUser = async (
         );
     }
 
-    const isMatch =
-        await bcrypt.compare(
-            password,
-            user.password
-        );
+    const isMatch = await bcrypt.compare(
+        password,
+        user.password
+    );
 
     if (!isMatch) {
         throw new AppError(
@@ -95,14 +76,10 @@ export const loginUser = async (
         role: user.role,
     };
 
-    const accessToken =
-        generateAccessToken(payload);
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
 
-    const refreshToken =
-        generateRefreshToken(payload);
-
-    user.refreshToken =
-        refreshToken;
+    user.refreshToken = refreshToken;
 
     await user.save();
 
