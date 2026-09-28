@@ -20,15 +20,10 @@ export const getDashboardService =
         ] = await Promise.all([
 
             getDashboardCounts(),
-
             getRevenue(),
-
             getPendingOrders(),
-
             getLowStockProducts(),
-
             getRecentOrders(),
-
             getRecentUsers(),
 
         ]);
@@ -36,15 +31,10 @@ export const getDashboardService =
         return {
 
             ...counts,
-
             revenue,
-
             pendingOrders,
-
             lowStockProducts,
-
             recentOrders,
-
             recentUsers,
 
         };
