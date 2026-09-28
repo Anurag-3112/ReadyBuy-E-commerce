@@ -2,42 +2,56 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const requiredEnvVars = [
-    "PORT",
-    "MONGODB_URI",
-    "JWT_ACCESS_SECRET",
-    "JWT_REFRESH_SECRET",
-];
+const requiredEnv = (name) => {
+    const value = process.env[name];
 
-requiredEnvVars.forEach((key) => {
-    if (!process.env[key]) {
-        throw new Error(`Missing required environment variable: ${key}`);
+    if (!value) {
+        throw new Error(
+            `Missing required environment variable: ${name}`
+        );
     }
-});
 
-export const config = {
-    port: process.env.PORT,
+    return value;
+};
+
+const config = {
+    port: Number(
+        process.env.PORT || 5001
+    ),
+
+    nodeEnv:
+        process.env.NODE_ENV ||
+        "development",
 
     mongo: {
-        uri: process.env.MONGODB_URI,
+        uri: requiredEnv(
+            "MONGODB_URI"
+        ),
     },
 
     redis: {
-        url: process.env.REDIS_URL,
+        url:
+            process.env.REDIS_URL ||
+            null,
     },
 
     rabbitmq: {
         url:
-            process.env.RABBITMQ_URL,
+            process.env.RABBITMQ_URL ||
+            null,
     },
 
     jwt: {
-        accessSecret: process.env.JWT_ACCESS_SECRET,
-        refreshSecret: process.env.JWT_REFRESH_SECRET,
+        accessSecret: requiredEnv(
+            "JWT_ACCESS_SECRET"
+        ),
+
+        refreshSecret: requiredEnv(
+            "JWT_REFRESH_SECRET"
+        ),
     },
 
     cloudinary: {
-
         cloudName:
             process.env.CLOUDINARY_CLOUD_NAME,
 
@@ -46,8 +60,18 @@ export const config = {
 
         apiSecret:
             process.env.CLOUDINARY_API_SECRET,
-
     },
 
-    nodeEnv: process.env.NODE_ENV || "development",
+    razorpay: {
+        keyId:
+            process.env.RAZORPAY_KEY_ID,
+
+        keySecret:
+            process.env.RAZORPAY_KEY_SECRET,
+
+        webhookSecret:
+            process.env.RAZORPAY_WEBHOOK_SECRET,
+    },
 };
+
+export default config;
