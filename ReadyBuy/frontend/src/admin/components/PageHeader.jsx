@@ -5,29 +5,16 @@ const PageHeader = ({
     title,
     action,
 }) => {
-
     return (
-
         <Row className="mb-4">
-
             <Col>
-
                 <h2>{title}</h2>
-
             </Col>
-
-            <Col
-                className="text-end"
-            >
-
+            <Col className="text-end">
                 {action}
-
             </Col>
-
         </Row>
-
     );
-
 };
 
 export default PageHeader;
