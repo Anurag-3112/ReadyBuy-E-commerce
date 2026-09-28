@@ -1,12 +1,11 @@
 import { useState } from "react";
 
-import Button from "react-bootstrap/Button";
-
 import {
     useQuery,
     useMutation,
     useQueryClient,
 } from "@tanstack/react-query";
+
 import LoadingState from "../components/LoadingState";
 import EmptyState from "../components/EmptyState";
 import PageHeader from "../components/PageHeader";
@@ -23,6 +22,7 @@ import {
 
 import { toast } from "react-toastify";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
+
 
 const OrdersList = () => {
 
@@ -44,10 +44,14 @@ const OrdersList = () => {
         setShowDetails,
     ] = useState(false);
 
-    const queryClient = useQueryClient();
+    const [
+        deleteOrderData,
+        setDeleteOrderData,
+    ] = useState(null);
 
-    const [deleteOrderData, setDeleteOrderData] =
-        useState(null);
+    const queryClient =
+        useQueryClient();
+
 
     const {
         data,
@@ -65,6 +69,7 @@ const OrdersList = () => {
         queryFn: () =>
             getOrders({
                 page,
+                limit: 10,
                 search,
                 status,
             }),
@@ -72,6 +77,7 @@ const OrdersList = () => {
         keepPreviousData: true,
 
     });
+
 
     const openDetails = (order) => {
 
@@ -81,6 +87,7 @@ const OrdersList = () => {
 
     };
 
+
     const closeDetails = () => {
 
         setSelectedOrder(null);
@@ -89,58 +96,100 @@ const OrdersList = () => {
 
     };
 
-    const deleteMutation = useMutation({
 
-        mutationFn: deleteOrder,
+    const deleteMutation =
+        useMutation({
 
-        onSuccess: () => {
+            mutationFn: deleteOrder,
 
-            toast.success(
-                "Order deleted successfully."
-            );
+            onSuccess: () => {
 
-            queryClient.invalidateQueries({
-                queryKey: ["orders"],
-            });
+                toast.success(
+                    "Order deleted successfully."
+                );
 
-            setDeleteOrderData(null);
+                queryClient.invalidateQueries({
+                    queryKey: ["orders"],
+                });
 
-        },
+                setDeleteOrderData(null);
 
-        onError: (error) => {
+            },
 
-            toast.error(
+            onError: (error) => {
 
-                error.response?.data?.message ||
+                toast.error(
+                    error.response?.data?.message ||
+                    "Unable to delete order."
+                );
 
-                "Unable to delete order."
+            },
 
-            );
-
-        },
-
-    });
+        });
 
 
     if (isLoading) {
+
         return <LoadingState />;
+
     }
 
+
     if (isError) {
+
         return (
             <EmptyState
                 title="Failed to load orders"
                 subtitle="Please try again."
             />
         );
+
     }
+
+
+    /*
+     * Backend response:
+     *
+     * {
+     *     orders: [],
+     *     pagination: {
+     *         page: 1,
+     *         limit: 10,
+     *         total: 0,
+     *         pages: 0
+     *     }
+     * }
+     */
+
+    const orders =
+        data?.orders ?? [];
+
+    const pagination =
+        data?.pagination ?? {};
+
+
+    const currentPage =
+        pagination.page ?? page;
+
+    const totalPages =
+        pagination.pages ?? 0;
+
+    const hasPrevPage =
+        currentPage > 1;
+
+    const hasNextPage =
+        currentPage < totalPages;
+
 
     return (
 
         <>
+
             <ConfirmDeleteModal
 
-                show={!!deleteOrderData}
+                show={
+                    !!deleteOrderData
+                }
 
                 handleClose={() =>
                     setDeleteOrderData(null)
@@ -148,34 +197,62 @@ const OrdersList = () => {
 
                 title="Delete Order"
 
-                message={`Are you sure you want to delete order "${deleteOrderData?._id}"?`}
-
-                loading={deleteMutation.isPending}
-
-                onConfirm={() =>
-                    deleteMutation.mutate(
-                        deleteOrderData._id
-                    )
+                message={
+                    `Are you sure you want to delete order "${deleteOrderData?._id}"?`
                 }
 
+                loading={
+                    deleteMutation.isPending
+                }
+
+                onConfirm={() => {
+
+                    if (
+                        deleteOrderData?._id
+                    ) {
+
+                        deleteMutation.mutate(
+                            deleteOrderData._id
+                        );
+
+                    }
+
+                }}
+
             />
+
+
             <PageHeader
                 title="Orders"
             />
+
 
             <OrderFilters
 
                 search={search}
 
-                setSearch={setSearch}
+                setSearch={(value) => {
+
+                    setSearch(value);
+
+                    setPage(1);
+
+                }}
 
                 status={status}
 
-                setStatus={setStatus}
+                setStatus={(value) => {
+
+                    setStatus(value);
+
+                    setPage(1);
+
+                }}
 
             />
 
-            {data.docs.length === 0 ? (
+
+            {orders.length === 0 ? (
 
                 <EmptyState
                     title="No Orders"
@@ -185,42 +262,73 @@ const OrdersList = () => {
             ) : (
 
                 <OrderTable
-                    orders={data.docs}
+
+                    orders={orders}
+
                     onView={openDetails}
+
                     onDelete={(order) =>
-                        setDeleteOrderData(order)
+                        setDeleteOrderData(
+                            order
+                        )
                     }
+
                 />
 
             )}
 
-            <PaginationControls
 
-                page={data.page}
+            {totalPages > 0 && (
 
-                hasPrevPage={data.hasPrevPage}
+                <PaginationControls
 
-                hasNextPage={data.hasNextPage}
+                    page={currentPage}
 
-                onPrevious={() =>
-                    setPage((prev) => prev - 1)
-                }
+                    hasPrevPage={
+                        hasPrevPage
+                    }
 
-                onNext={() =>
-                    setPage((prev) => prev + 1)
-                }
+                    hasNextPage={
+                        hasNextPage
+                    }
 
-            />
+                    onPrevious={() =>
+                        setPage(
+                            (prev) =>
+                                Math.max(
+                                    prev - 1,
+                                    1
+                                )
+                        )
+                    }
+
+                    onNext={() =>
+                        setPage(
+                            (prev) =>
+                                prev + 1
+                        )
+                    }
+
+                />
+
+            )}
+
 
             {selectedOrder && (
 
                 <OrderDetailsModal
 
-                    show={showDetails}
+                    show={
+                        showDetails
+                    }
 
-                    handleClose={closeDetails}
+                    handleClose={
+                        closeDetails
+                    }
 
-                    order={selectedOrder}
+                    order={
+                        selectedOrder
+                    }
 
                 />
 
@@ -231,5 +339,6 @@ const OrdersList = () => {
     );
 
 };
+
 
 export default OrdersList;
