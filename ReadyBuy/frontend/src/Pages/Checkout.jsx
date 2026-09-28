@@ -115,7 +115,7 @@ const Checkout = () => {
     };
 
     const discountAmount = Number(
-        appliedCoupon?.discountAmount || 0
+        appliedCoupon?.discount || 0
     );
 
     return (
