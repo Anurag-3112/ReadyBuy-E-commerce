@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { config } from "../../config/env.js";
+import config from "../../config/env.js";
 import AppError from "../errors/AppError.js";
 
 const authenticate = (req, res, next) => {
