@@ -7,7 +7,6 @@ const wishlistSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
-
         product: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Product",
@@ -19,12 +18,6 @@ const wishlistSchema = new mongoose.Schema(
     }
 );
 
-/*
-|--------------------------------------------------------------------------
-| One Product Per User
-|--------------------------------------------------------------------------
-*/
-
 wishlistSchema.index(
     {
         user: 1,
@@ -34,12 +27,6 @@ wishlistSchema.index(
         unique: true,
     }
 );
-
-/*
-|--------------------------------------------------------------------------
-| Faster Queries
-|--------------------------------------------------------------------------
-*/
 
 wishlistSchema.index({
     user: 1,
