@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import "./NewCollections.css";
-
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-
 import Item from "../Item/Item";
 import { getProducts } from "../../services/product.service";
 
@@ -23,7 +21,6 @@ const NewCollections = () => {
 
   const prevImage = (id, images = []) => {
     if (!images.length) return;
-
     setActiveImage((prev) => ({
       ...prev,
       [id]:
@@ -35,7 +32,6 @@ const NewCollections = () => {
 
   const nextImage = (id, images = []) => {
     if (!images.length) return;
-
     setActiveImage((prev) => ({
       ...prev,
       [id]:
@@ -52,32 +48,23 @@ const NewCollections = () => {
         id="collection"
       >
         <div className="collections-header">
-
           <div>
-
             <span className="section-tag">
               Just Arrived
             </span>
-
             <h2>New Collections</h2>
-
             <p>
               Discover the latest additions to our store.
             </p>
-
           </div>
-
         </div>
-
         <div className="collections-grid">
-
           {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
             <div
               key={item}
               className="collection-skeleton"
             />
           ))}
-
         </div>
       </section>
     );
@@ -86,19 +73,10 @@ const NewCollections = () => {
   if (error) {
     return (
       <section className="new-collections">
-
         <div className="empty-state">
-
-          <h3>
-            Failed to load products.
-          </h3>
-
-          <p>
-            Please try again later.
-          </p>
-
+          <h3>Failed to load products.</h3>
+          <p>Please try again later.</p>
         </div>
-
       </section>
     );
   }
@@ -108,41 +86,28 @@ const NewCollections = () => {
       className="new-collections"
       id="collection"
     >
-
       <div className="collections-header">
-
         <div>
-
           <span className="section-tag">
             Just Arrived
           </span>
-
-          <h2>
-            New Collections
-          </h2>
-
+          <h2>New Collections</h2>
           <p>
             Explore our newest arrivals crafted for every style.
           </p>
-
         </div>
-
         <Link
           to="/"
           className="view-all-btn"
         >
           View All →
         </Link>
-
       </div>
-
       <div className="collections-grid">
-
         {products.map((item) => {
           const productId = item._id;
           const images = item.images || [];
-          const index =
-            activeImage[productId] ?? 0;
+          const index = activeImage[productId] ?? 0;
 
           return (
             <div
@@ -165,10 +130,8 @@ const NewCollections = () => {
                   item.price?.original ?? 0
                 }
               />
-
               {images.length > 1 && (
                 <>
-
                   <button
                     className="img-btn left"
                     onClick={() =>
@@ -180,7 +143,6 @@ const NewCollections = () => {
                   >
                     ‹
                   </button>
-
                   <button
                     className="img-btn right"
                     onClick={() =>
@@ -192,16 +154,12 @@ const NewCollections = () => {
                   >
                     ›
                   </button>
-
                 </>
               )}
-
             </div>
           );
         })}
-
       </div>
-
     </section>
   );
 };
