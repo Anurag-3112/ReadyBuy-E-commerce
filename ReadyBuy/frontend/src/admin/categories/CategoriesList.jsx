@@ -22,25 +22,11 @@ import {
 const CategoriesList = () => {
 
     const [page, setPage] = useState(1);
-
-    const [search, setSearch] =
-        useState("");
-
-    const [status, setStatus] =
-        useState("");
-
-    const [showModal, setShowModal] =
-        useState(false);
-
-    const [
-        selectedCategory,
-        setSelectedCategory,
-    ] = useState(null);
-
-    const [
-        deleteCategoryItem,
-        setDeleteCategoryItem,
-    ] = useState(null);
+    const [search, setSearch] = useState("");
+    const [status, setStatus] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [selectedCategory, setSelectedCategory,] = useState(null);
+    const [deleteCategoryItem, setDeleteCategoryItem,] = useState(null);
 
     const {
         data,
@@ -81,43 +67,29 @@ const CategoriesList = () => {
         data?.docs || [];
 
     const handleDelete = async () => {
-
         if (!deleteCategoryItem) return;
-
         try {
-
             await deleteCategory(
                 deleteCategoryItem.id
             );
-
             setDeleteCategoryItem(null);
-
         } catch (error) {
-
             console.error(error);
-
         }
-
     };
-
     return (
-
         <>
-
             <PageHeader
                 title="Categories"
                 action={
                     <Button
                         onClick={() => {
-
                             setSelectedCategory(
                                 null
                             );
-
                             setShowModal(
                                 true
                             );
-
                         }}
                     >
                         Add Category
@@ -126,112 +98,75 @@ const CategoriesList = () => {
             />
 
             <CategoryFilters
-
                 search={search}
-
                 setSearch={setSearch}
-
                 status={status}
-
                 setStatus={setStatus}
-
             />
-
             {categories.length === 0 ? (
-
                 <EmptyState
                     title="No Categories"
                     subtitle="Create your first category."
                 />
-
             ) : (
-
                 <CategoryTable
-
                     categories={categories}
-
                     onEdit={(category) => {
-
                         setSelectedCategory(
                             category
                         );
-
                         setShowModal(
                             true
                         );
-
                     }}
-
                     onDelete={
                         setDeleteCategoryItem
                     }
-
                 />
-
             )}
 
             <PaginationControls
-
                 page={
                     data?.page || page
                 }
-
                 hasPrevPage={
                     data?.hasPrevPage
                 }
-
                 hasNextPage={
                     data?.hasNextPage
                 }
-
                 onPrevious={() =>
                     setPage((p) => p - 1)
                 }
-
                 onNext={() =>
                     setPage((p) => p + 1)
                 }
-
             />
 
             <CategoryModal
-
                 show={showModal}
-
                 handleClose={() =>
                     setShowModal(false)
                 }
-
                 category={
                     selectedCategory
                 }
-
             />
 
             <ConfirmDeleteModal
-
                 show={!!deleteCategoryItem}
-
                 handleClose={() =>
                     setDeleteCategoryItem(
                         null
                     )
                 }
-
                 title="Delete Category"
-
                 message={`Are you sure you want to delete "${deleteCategoryItem?.name}"?`}
-
                 loading={false}
-
                 onConfirm={handleDelete}
-
             />
-
         </>
-
     );
-
 };
 
 export default CategoriesList;
