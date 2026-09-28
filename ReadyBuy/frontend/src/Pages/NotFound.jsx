@@ -24,11 +24,9 @@ const NotFound = () => {
                     >
                         404
                     </h1>
-
                     <h2 className="fw-bold mb-3">
                         Page Not Found
                     </h2>
-
                     <p
                         className="text-muted mb-4"
                         style={{
@@ -39,7 +37,6 @@ const NotFound = () => {
                         Sorry, the page you are looking for
                         doesn't exist or has been moved.
                     </p>
-
                     <div className="d-flex justify-content-center gap-3 flex-wrap">
                         <Button
                             as={Link}
@@ -49,7 +46,6 @@ const NotFound = () => {
                         >
                             Go to Home
                         </Button>
-
                         <Button
                             as={Link}
                             to="/"
