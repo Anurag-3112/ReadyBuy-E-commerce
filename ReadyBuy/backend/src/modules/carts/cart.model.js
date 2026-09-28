@@ -7,12 +7,10 @@ const cartItemSchema = new mongoose.Schema(
             ref: "Product",
             required: true,
         },
-
         size: {
             type: String,
             required: true,
         },
-
         quantity: {
             type: Number,
             default: 1,
@@ -32,7 +30,6 @@ const cartSchema = new mongoose.Schema(
             unique: true,
             required: true,
         },
-
         items: [cartItemSchema],
     },
     {
@@ -40,7 +37,4 @@ const cartSchema = new mongoose.Schema(
     }
 );
 
-export default mongoose.model(
-    "Cart",
-    cartSchema
-);
+export default mongoose.model("Cart", cartSchema);
