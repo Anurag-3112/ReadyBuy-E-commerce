@@ -2,13 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { FiArrowRight } from "react-icons/fi";
+
 import { getOrders } from "../services/order.service";
+
 import "./CSS/MyOrders.css";
+
 
 const MyOrders = () => {
 
     const {
-        data = [],
+        data,
         isLoading,
         error,
     } = useQuery({
@@ -16,23 +19,55 @@ const MyOrders = () => {
         queryFn: getOrders,
     });
 
+
     if (isLoading) {
+
         return (
             <div className="orders-loading">
-                <h2>Loading your orders...</h2>
+                <h2>
+                    Loading your orders...
+                </h2>
             </div>
         );
+
     }
+
 
     if (error) {
+
         return (
             <div className="orders-loading">
-                <h2>Failed to load orders.</h2>
+                <h2>
+                    Failed to load orders.
+                </h2>
             </div>
         );
+
     }
 
-    if (data.length === 0) {
+
+    /*
+     * Backend response:
+     *
+     * {
+     *     orders: [],
+     *     pagination: {
+     *         page: 1,
+     *         limit: 10,
+     *         total: 0,
+     *         pages: 0
+     *     }
+     * }
+     *
+     * Therefore, use data.orders.
+     */
+
+    const orders =
+        data?.orders ?? [];
+
+
+    if (orders.length === 0) {
+
         return (
             <section className="orders-page">
 
@@ -42,11 +77,14 @@ const MyOrders = () => {
                         <HiOutlineShoppingBag />
                     </div>
 
-                    <h2>No Orders Yet</h2>
+                    <h2>
+                        No Orders Yet
+                    </h2>
 
                     <p>
                         You haven't placed any orders yet.
-                        Start shopping to discover our premium collection.
+                        Start shopping to discover our premium
+                        collection.
                     </p>
 
                     <Link
@@ -60,7 +98,9 @@ const MyOrders = () => {
 
             </section>
         );
+
     }
+
 
     return (
 
@@ -68,9 +108,13 @@ const MyOrders = () => {
 
             <div className="orders-header">
 
-                <span>Order History</span>
+                <span>
+                    Order History
+                </span>
 
-                <h1>My Orders</h1>
+                <h1>
+                    My Orders
+                </h1>
 
                 <p>
                     Track your purchases and view previous orders.
@@ -78,9 +122,10 @@ const MyOrders = () => {
 
             </div>
 
+
             <div className="orders-list">
 
-                {data.map((order) => (
+                {orders.map((order) => (
 
                     <div
                         key={order._id}
@@ -90,7 +135,8 @@ const MyOrders = () => {
                         <div>
 
                             <h3>
-                                Order #{order._id.slice(-8)}
+                                Order #
+                                {order._id?.slice(-8)}
                             </h3>
 
                             <p className="order-status">
@@ -99,16 +145,20 @@ const MyOrders = () => {
 
                         </div>
 
+
                         <div className="order-price">
                             ₹{order.totalAmount}
                         </div>
+
 
                         <Link
                             to={`/orders/${order._id}`}
                             className="order-link"
                         >
                             View Details
+
                             <FiArrowRight />
+
                         </Link>
 
                     </div>
@@ -120,6 +170,8 @@ const MyOrders = () => {
         </section>
 
     );
+
 };
+
 
 export default MyOrders;
