@@ -5,10 +5,8 @@ export const registerUser = async (userData) => {
         '/auth/register',
         userData
     )
-
     return res.data
 }
-
 export const loginUser = async (credentials) => {
     const res = await api.post(
         '/auth/login',
@@ -17,7 +15,6 @@ export const loginUser = async (credentials) => {
 
     return res.data
 }
-
 export const getProfile = async () => {
     const res = await api.get(
         '/auth/profile'
