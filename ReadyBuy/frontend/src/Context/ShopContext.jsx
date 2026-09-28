@@ -4,9 +4,7 @@ import React, {
     useEffect,
     useState,
 } from "react";
-
 import { AuthContext } from "./AuthContext";
-
 import {
     getCart,
     addToCart as addCartItem,
@@ -18,13 +16,9 @@ export const ShopContext = createContext(null);
 
 const ShopContextProvider = ({ children }) => {
     const { isAuthenticated } = useContext(AuthContext);
-
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    /**
-     * Fetch Cart
-     */
     const refreshCart = async () => {
         if (!isAuthenticated) {
             setCartItems([]);
@@ -35,7 +29,6 @@ const ShopContextProvider = ({ children }) => {
 
         try {
             const data = await getCart();
-
             setCartItems(data.data.cart?.items || []);
         } catch (error) {
             console.error(
@@ -47,9 +40,6 @@ const ShopContextProvider = ({ children }) => {
         }
     };
 
-    /**
-     * Load cart whenever authentication changes
-     */
     useEffect(() => {
         if (isAuthenticated) {
             refreshCart();
@@ -58,9 +48,6 @@ const ShopContextProvider = ({ children }) => {
         }
     }, [isAuthenticated]);
 
-    /**
-     * Add Product
-     */
     const addToCart = async (
         productId,
         size
@@ -76,7 +63,6 @@ const ShopContextProvider = ({ children }) => {
                 size,
                 quantity: 1,
             });
-
             await refreshCart();
         } catch (error) {
             console.error(
@@ -86,9 +72,6 @@ const ShopContextProvider = ({ children }) => {
         }
     };
 
-    /**
-     * Update Quantity
-     */
     const updateQuantity = async (
         productId,
         size,
@@ -102,7 +85,6 @@ const ShopContextProvider = ({ children }) => {
                 size,
                 quantity
             );
-
             await refreshCart();
         } catch (error) {
             console.error(
@@ -112,9 +94,6 @@ const ShopContextProvider = ({ children }) => {
         }
     };
 
-    /**
-     * Remove Product
-     */
     const removeFromCart = async (
         productId,
         size
@@ -124,8 +103,7 @@ const ShopContextProvider = ({ children }) => {
         try {
             const item = cartItems.find(
                 (cartItem) =>
-                    cartItem.product?._id ===
-                    productId &&
+                    cartItem.product?._id === productId &&
                     cartItem.size === size
             );
 
@@ -153,9 +131,6 @@ const ShopContextProvider = ({ children }) => {
         }
     };
 
-    /**
-     * Clear Cart
-     */
     const clearCart = () => {
         setCartItems([]);
     };
