@@ -1,9 +1,7 @@
 import React from "react";
 import "./Popular.css";
-
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-
 import Item from "../Item/Item";
 import { getProducts } from "../../services/product.service";
 
@@ -32,15 +30,12 @@ const Popular = () => {
                         <span className="section-tag">
                             Featured Collection
                         </span>
-
                         <h2>Popular in Women</h2>
-
                         <p>
                             Discover our most loved styles.
                         </p>
                     </div>
                 </div>
-
                 <div className="popular-grid">
                     {[1, 2, 3, 4].map((item) => (
                         <div
@@ -57,13 +52,8 @@ const Popular = () => {
         return (
             <section className="popular">
                 <div className="empty-state">
-                    <h3>
-                        Failed to load products.
-                    </h3>
-
-                    <p>
-                        Please try again later.
-                    </p>
+                    <h3>Failed to load products.</h3>
+                    <p>Please try again later.</p>
                 </div>
             </section>
         );
@@ -79,16 +69,11 @@ const Popular = () => {
                     <span className="section-tag">
                         Featured Collection
                     </span>
-
-                    <h2>
-                        Popular in Women
-                    </h2>
-
+                    <h2>Popular in Women</h2>
                     <p>
                         Curated essentials chosen by our customers.
                     </p>
                 </div>
-
                 <Link
                     to="/women"
                     className="view-all-btn"
@@ -96,7 +81,6 @@ const Popular = () => {
                     View All →
                 </Link>
             </div>
-
             <div className="popular-grid">
                 {popularProducts.length > 0 ? (
                     popularProducts.map((item) => (
@@ -120,10 +104,7 @@ const Popular = () => {
                     ))
                 ) : (
                     <div className="empty-state">
-                        <h3>
-                            No women's products found
-                        </h3>
-
+                        <h3>No women's products found</h3>
                         <p>
                             Add some active women's products from the admin dashboard.
                         </p>
