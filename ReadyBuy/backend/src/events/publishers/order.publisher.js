@@ -1,32 +1,25 @@
-import {
-    getChannel,
-} from "../../config/rabbitmq.js";
+import { getChannel } from "../../config/rabbitmq.js";
 
-export const publishOrderCreated =
-    async (order) => {
+export const publishOrderCreated = async (order) => {
+    const channel = getChannel();
+    const exchange = "order.exchange";
 
-        const channel =
-            getChannel();
+    await channel.assertExchange(
+        exchange,
+        "fanout",
+        {
+            durable: true,
+        }
+    );
 
-        const exchange =
-            "order.exchange";
-
-        await channel.assertExchange(
-            exchange,
-            "fanout",
-            {
-                durable: true,
-            }
-        );
-
-        channel.publish(
-            exchange,
-            "",
-            Buffer.from(
-                JSON.stringify({
-                    orderId: order._id,
-                    items: order.items,
-                })
-            )
-        );
-    };
+    channel.publish(
+        exchange,
+        "",
+        Buffer.from(
+            JSON.stringify({
+                orderId: order._id,
+                items: order.items,
+            })
+        )
+    );
+};
