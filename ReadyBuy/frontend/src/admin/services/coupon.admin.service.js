@@ -19,6 +19,11 @@ export const getCoupons = async ({
     return data.data;
 };
 
+export const getAvailableCoupons = async () => {
+    const { data } = await api.get("/coupons/available");
+    return data.data;
+};
+
 export const getCoupon = async (id) => {
     const { data } = await api.get(`/coupons/${id}`);
     return data.data;
