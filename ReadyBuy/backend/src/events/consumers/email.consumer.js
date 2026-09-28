@@ -1,54 +1,43 @@
-import {
-    getChannel,
-} from "../../config/rabbitmq.js";
+import { getChannel } from "../../config/rabbitmq.js";
 
-export const startEmailConsumer =
-    async () => {
+export const startEmailConsumer = async () => {
+    const channel = getChannel();
+    const exchange = "order.exchange";
+    const queue = "email.queue";
 
-        const channel =
-            getChannel();
+    await channel.assertExchange(
+        exchange,
+        "fanout",
+        {
+            durable: true,
+        }
+    );
 
-        const exchange =
-            "order.exchange";
+    await channel.assertQueue(
+        queue,
+        {
+            durable: true,
+        }
+    );
 
-        const queue =
-            "email.queue";
+    await channel.bindQueue(
+        queue,
+        exchange,
+        ""
+    );
 
-        await channel.assertExchange(
-            exchange,
-            "fanout",
-            {
-                durable: true,
-            }
-        );
+    channel.consume(
+        queue,
+        async (msg) => {
+            const order = JSON.parse(
+                msg.content.toString()
+            );
 
-        await channel.assertQueue(
-            queue,
-            {
-                durable: true,
-            }
-        );
+            console.log(
+                `Email sent for order ${order.orderId}`
+            );
 
-        await channel.bindQueue(
-            queue,
-            exchange,
-            ""
-        );
-
-        channel.consume(
-            queue,
-            async (msg) => {
-
-                const order =
-                    JSON.parse(
-                        msg.content.toString()
-                    );
-
-                console.log(
-                    `Email sent for order ${order.orderId}`
-                );
-
-                channel.ack(msg);
-            }
-        );
-    };
+            channel.ack(msg);
+        }
+    );
+};
