@@ -1,25 +1,19 @@
 import AppError from "../../shared/errors/AppError.js";
-
 import {
     findCartByUserId,
     createCart,
     saveCart,
 } from "./cart.repository.js";
-
 import {
     findProductById,
 } from "../products/product.repository.js";
 
-/**
- * Add to Cart
- */
 export const addToCartService = async (
     userId,
     productId,
     size,
     quantity
 ) => {
-
     const product = await findProductById(productId);
 
     if (!product) {
@@ -64,15 +58,10 @@ export const addToCartService = async (
 
     await saveCart(cart);
 
-    // Return populated cart
     return await findCartByUserId(userId);
 };
 
-/**
- * Get Cart
- */
 export const getCartService = async (userId) => {
-
     const cart = await findCartByUserId(userId);
 
     if (!cart) {
@@ -89,13 +78,10 @@ export const getCartService = async (userId) => {
     let totalAmount = 0;
 
     cart.items.forEach((item) => {
-
         totalItems += item.quantity;
-
         totalAmount +=
             item.product.price.discounted *
             item.quantity;
-
     });
 
     return {
@@ -105,16 +91,12 @@ export const getCartService = async (userId) => {
     };
 };
 
-/**
- * Update Cart Item
- */
 export const updateCartItemService = async (
     userId,
     productId,
     size,
     quantity
 ) => {
-
     const cart = await findCartByUserId(userId);
 
     if (!cart) {
@@ -138,15 +120,11 @@ export const updateCartItemService = async (
     return await findCartByUserId(userId);
 };
 
-/**
- * Remove Cart Item
- */
 export const removeFromCartService = async (
     userId,
     productId,
     size
 ) => {
-
     const cart = await findCartByUserId(userId);
 
     if (!cart) {
