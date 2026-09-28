@@ -11,28 +11,19 @@ export const getUsers = async (
     res,
     next
 ) => {
-
     try {
-
         const users =
             await getUsersService(
                 req.query
             );
 
         res.status(200).json({
-
             success: true,
-
             data: users,
-
         });
-
     } catch (error) {
-
         next(error);
-
     }
-
 };
 
 export const getUser = async (
@@ -40,28 +31,19 @@ export const getUser = async (
     res,
     next
 ) => {
-
     try {
-
         const user =
             await getUserService(
                 req.params.id
             );
 
         res.status(200).json({
-
             success: true,
-
             data: user,
-
         });
-
     } catch (error) {
-
         next(error);
-
     }
-
 };
 
 export const updateRole = async (
@@ -69,35 +51,22 @@ export const updateRole = async (
     res,
     next
 ) => {
-
     try {
-
         const user =
             await updateRoleService(
-
                 req.params.id,
-
                 req.body.role
-
             );
 
         res.status(200).json({
-
             success: true,
-
             message:
                 "Role updated successfully.",
-
             data: user,
-
         });
-
     } catch (error) {
-
         next(error);
-
     }
-
 };
 
 export const updateStatus = async (
@@ -105,35 +74,22 @@ export const updateStatus = async (
     res,
     next
 ) => {
-
     try {
-
         const user =
             await updateStatusService(
-
                 req.params.id,
-
                 req.body.status
-
             );
 
         res.status(200).json({
-
             success: true,
-
             message:
                 "Status updated successfully.",
-
             data: user,
-
         });
-
     } catch (error) {
-
         next(error);
-
     }
-
 };
 
 export const deleteUser = async (
@@ -141,29 +97,19 @@ export const deleteUser = async (
     res,
     next
 ) => {
-
     try {
-
         const user =
             await deleteUserService(
                 req.params.id
             );
 
         res.status(200).json({
-
             success: true,
-
             message:
                 "User deleted successfully.",
-
             data: user,
-
         });
-
     } catch (error) {
-
         next(error);
-
     }
-
 };
