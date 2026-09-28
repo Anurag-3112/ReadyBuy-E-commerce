@@ -1,35 +1,26 @@
 import React, {
-  useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
-
 import "./CSS/ShopCateogory.css";
-
-import { ShopContext } from "../Context/ShopContext";
 import Item from "../Components/Item/Item";
-
 import { getProducts } from "../services/product.service";
 
 const ShopCateogory = ({ banner, category }) => {
-
   const [sortBy, setSortBy] = useState("default");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState({});
 
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-
         const data = await getProducts({
           category,
           limit: 100,
         });
-
         setProducts(data.docs || []);
       } catch (error) {
         console.error(error);
@@ -41,7 +32,6 @@ const ShopCateogory = ({ banner, category }) => {
     fetchProducts();
   }, [category]);
 
-
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -50,7 +40,6 @@ const ShopCateogory = ({ banner, category }) => {
   }, [category]);
 
   const prevImage = (id, images = []) => {
-
     if (!images.length) return;
 
     setActiveImage((prev) => ({
@@ -60,11 +49,9 @@ const ShopCateogory = ({ banner, category }) => {
           ? prev[id] - 1
           : images.length - 1,
     }));
-
   };
 
   const nextImage = (id, images = []) => {
-
     if (!images.length) return;
 
     setActiveImage((prev) => ({
@@ -74,7 +61,6 @@ const ShopCateogory = ({ banner, category }) => {
           ? (prev[id] ?? 0) + 1
           : 0,
     }));
-
   };
 
   const filteredProducts = useMemo(() => {
@@ -117,23 +103,18 @@ const ShopCateogory = ({ banner, category }) => {
   }
 
   return (
-
     <section className="shop-category">
-
       <img
         className="shop-cateogory-banner"
         src={banner}
         alt={category}
       />
-
       <div className="shopcateogory-indexSort">
-
         <p>
           Showing
           <span> {filteredProducts.length} </span>
           products
         </p>
-
         <select
           className="shop-category-sort"
           value={sortBy}
@@ -144,60 +125,41 @@ const ShopCateogory = ({ banner, category }) => {
           <option value="default">
             Featured
           </option>
-
           <option value="price-low">
             Price: Low to High
           </option>
-
           <option value="price-high">
             Price: High to Low
           </option>
-
           <option value="name">
             Name (A-Z)
           </option>
-
           <option value="newest">
             Newest
           </option>
-
         </select>
-
       </div>
-
       {filteredProducts.length === 0 ? (
-
         <div className="shop-empty">
-
           <h2>No Products Found</h2>
-
           <p>
             We're adding more products to this
             category soon.
           </p>
-
         </div>
-
       ) : (
-
         <div className="shopcateogory-products">
-
           {filteredProducts.map((item) => {
-
             const productId = item._id;
-
             const images = item.images || [];
-
             const index =
               activeImage[productId] ?? 0;
 
             return (
-
               <div
                 className="item-wrapper"
                 key={productId}
               >
-
                 <Item
                   slug={item.slug}
                   name={item.name}
@@ -212,7 +174,6 @@ const ShopCateogory = ({ banner, category }) => {
                     item.price?.original || 0
                   }
                 />
-
                 {images.length > 1 && (
                   <>
                     <button
@@ -226,7 +187,6 @@ const ShopCateogory = ({ banner, category }) => {
                     >
                       ‹
                     </button>
-
                     <button
                       className="img-btn right"
                       onClick={() =>
@@ -240,17 +200,11 @@ const ShopCateogory = ({ banner, category }) => {
                     </button>
                   </>
                 )}
-
               </div>
-
             );
-
           })}
-
         </div>
-
       )}
-
     </section>
   );
 };
