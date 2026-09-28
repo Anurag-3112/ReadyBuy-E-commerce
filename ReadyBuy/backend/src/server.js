@@ -1,5 +1,5 @@
 import app from "./app.js";
-import { config } from "./config/env.js";
+import config from "./config/env.js";
 import { connectDatabase } from "./config/database.js";
 import { connectRabbitMQ } from "./config/rabbitmq.js";
 import logger from "./shared/logger/logger.js";
