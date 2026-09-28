@@ -7,19 +7,14 @@ const inventoryEventSchema =
             orderId: {
                 type:
                     mongoose.Schema.Types.ObjectId,
-
                 ref: "Order",
-
                 required: true,
-
                 unique: true,
-
                 index: true,
             },
 
             status: {
                 type: String,
-
                 enum: [
                     "PROCESSING",
                     "COMPLETED",
@@ -35,7 +30,6 @@ const inventoryEventSchema =
 
             error: {
                 type: String,
-
                 trim: true,
             },
         },
