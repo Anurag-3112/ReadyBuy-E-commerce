@@ -1,17 +1,39 @@
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { toggleWishlist } from "../../services/wishlist.service";
+import { AuthContext } from "../../Context/AuthContext";
+import {
+    getWishlist,
+    toggleWishlist,
+} from "../../services/wishlist.service";
+import { useContext } from "react";
 
 const WishlistButton = ({
     productId,
-    isWishlisted,
 }) => {
+    const { isAuthenticated } = useContext(AuthContext);
     const queryClient = useQueryClient();
+    const { data: wishlist = [] } = useQuery({
+        queryKey: ["wishlist"],
+        queryFn: getWishlist,
+        enabled: isAuthenticated,
+    });
+    const isWishlisted = wishlist.some(
+        (item) => item.product?._id === productId
+    );
 
     const mutation = useMutation({
         mutationFn: () => toggleWishlist(productId),
-        onSuccess: () => {
+        onSuccess: (result) => {
+            toast.success(
+                result.wishlisted
+                    ? "Added to wishlist."
+                    : "Removed from wishlist."
+            );
             queryClient.invalidateQueries({
                 queryKey: ["wishlist"],
             });

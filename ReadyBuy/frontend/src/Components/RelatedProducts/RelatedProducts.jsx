@@ -38,6 +38,7 @@ const RelatedProducts = ({ s_product }) => {
         {related.map((item) => (
           <Item
             key={item._id}
+            id={item._id}
             slug={item.slug}
             name={item.name}
             image={item.images?.[0] || '/placeholder.png'}

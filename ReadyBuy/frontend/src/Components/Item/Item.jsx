@@ -5,6 +5,7 @@ import { FaArrowRight } from "react-icons/fa";
 import WishlistButton from "../Wishlist/WishlistButton";
 
 const Item = ({
+  id,
   _id,
   slug,
   image,
@@ -30,8 +31,7 @@ const Item = ({
         }}
       >
         <WishlistButton
-          productId={_id}
-          isWishlisted={false}
+          productId={id || _id}
         />
       </div>
       <Link
