@@ -161,6 +161,7 @@ const ShopCateogory = ({ banner, category }) => {
                 key={productId}
               >
                 <Item
+                  id={productId}
                   slug={item.slug}
                   name={item.name}
                   image={

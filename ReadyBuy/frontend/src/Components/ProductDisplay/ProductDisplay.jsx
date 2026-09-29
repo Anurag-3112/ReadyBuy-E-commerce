@@ -177,44 +177,45 @@ const ProductDisplay = ({ s_product }) => {
                             </small>
                         )}
                 </div>
-                {quantity === 0 ? (
-                    <button
-                        onClick={handleAdd}
-                        disabled={adding}
-                    >
-                        {adding
-                            ? "Adding..."
-                            : "Add To Cart"}
-                    </button>
-                ) : (
-                    <div className="product-quantity-controls mt-3">
+                <div className="d-flex align-items-center gap-2 mt-3">
+                    {quantity === 0 ? (
                         <button
-                            className="qty-btn minus"
-                            onClick={() =>
-                                removeFromCart(
-                                    productId,
-                                    selectedSize
-                                )
-                            }
-                        >
-                            −
-                        </button>
-                        <span className="qty-display">
-                            {quantity}
-                        </span>
-                        <button
-                            className="qty-btn plus"
                             onClick={handleAdd}
                             disabled={adding}
                         >
-                            +
+                            {adding
+                                ? "Adding..."
+                                : "Add To Cart"}
                         </button>
-                        <WishlistButton
-                            productId={productId}
-                            isWishlisted={false}
-                        />
-                    </div>
-                )}
+                    ) : (
+                        <div className="product-quantity-controls">
+                            <button
+                                className="qty-btn minus"
+                                onClick={() =>
+                                    removeFromCart(
+                                        productId,
+                                        selectedSize
+                                    )
+                                }
+                            >
+                                −
+                            </button>
+                            <span className="qty-display">
+                                {quantity}
+                            </span>
+                            <button
+                                className="qty-btn plus"
+                                onClick={handleAdd}
+                                disabled={adding}
+                            >
+                                +
+                            </button>
+                        </div>
+                    )}
+                    <WishlistButton
+                        productId={productId}
+                    />
+                </div>
             </div>
         </div>
     );
