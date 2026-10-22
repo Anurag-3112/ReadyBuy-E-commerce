@@ -20,7 +20,7 @@ const OrderSuccess = () => {
                 </span>
                 <h1>Thank You!</h1>
                 <p className="success-message">
-                    Your order has been placed successfully.
+                    Your order has been placed successfully. 
                     We've received your order and will start processing it shortly.
                 </p>
                 <div className="success-details">
