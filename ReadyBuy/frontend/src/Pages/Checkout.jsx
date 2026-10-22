@@ -7,7 +7,7 @@ import OrderSummary from "../Components/Checkout/OrderSummary";
 import PaymentMethod from "../Components/Checkout/PaymentMethod";
 import PlaceOrderButton from "../Components/Checkout/PlaceOrderButton";
 import { ShopContext } from "../Context/ShopContext";
-import {
+import { 
     applyCoupon,
     getAvailableCoupons,
 } from "../admin/services/coupon.admin.service";
