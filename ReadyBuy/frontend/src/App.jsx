@@ -24,7 +24,6 @@ import kids_banner from "./Components/assets/kids_banner.png";
 import AdminRoutes from "./admin/routes/AdminRoutes";
 import AdminProtectedRoute from "./admin/components/AdminProtectedRoute";
 
-// Optional
 import NotFound from "./Pages/NotFound";
 
 function StoreLayout() {
