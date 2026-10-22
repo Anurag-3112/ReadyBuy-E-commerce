@@ -13,7 +13,7 @@ const NotFound = () => {
                 minHeight: "80vh",
                 background: "#f8f9fa",
             }}
-        >
+        > 
             <Row className="text-center">
                 <Col>
                     <h1
